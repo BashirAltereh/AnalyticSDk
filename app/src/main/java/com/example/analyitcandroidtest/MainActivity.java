@@ -8,16 +8,16 @@ import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.analyticandroid.network.ApiExplorer;
+import com.example.analyticandroid.network.OnDataLoaded;
 import com.example.analyticandroid.utils.Function;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import org.json.JSONArray;
 
 public class MainActivity extends AppCompatActivity {
     TextView mTvInfo;
@@ -34,39 +34,16 @@ public class MainActivity extends AppCompatActivity {
         imei = getImei();
         Log.d("imei_", "imei: " + imei);
         mTvInfo.setText((new Function()).openSession());
-        ApiExplorer.execute(new Runnable() {
+        ApiExplorer.createGETRequest(this, new OnDataLoaded() {
             @Override
-            public void run() {
-                Log.d("Result_", "run...");
+            public void onDataLoadedSuccessfully(JSONArray jsonArray) {
+                Log.d("Result_","onDataLoadedSuccessfully");
+            }
 
-                HttpURLConnection connection = null;
-                try {
-                    Log.d("Result_", "11111");
-                    connection = (HttpURLConnection) (new URL("https://api.androidhive.info/json/contacts.json")).openConnection();
-                    Log.d("Result_", "22222");
-                    connection.setRequestMethod("GET"); // or post
-                    Log.d("Result_", "33333");
-                    connection.connect();
-                    Log.d("Result_", "44444");
-                    InputStream is = connection.getInputStream();
-                    Log.d("Result_", "Response: " + is);
-                    int i;
-                    String s = "";
-                    while ((i = is.read()) != -1) {
+            @Override
+            public void onError(Exception e) {
+                Log.d("Result_","onError: "+e);
 
-                        // converts integer to character
-                        char c = (char) i;
-
-                        // prints character
-                        s += c;
-                        Log.d("Result_", "Response: " + c);
-                    }
-                    Log.d("Result_", "Response: " + s);
-
-
-                } catch (Exception e) {
-                    Log.d("Result_", "Error: " + e);
-                }
             }
         });
     }
@@ -77,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         if (isPermissionGranted()) {
             String imei = telephonyManager.getImei();
             if (!imei.isEmpty()) {
-                 Log.d("imei_","123456");
+                Log.d("imei_", "123456");
                 mTvIMEI.setText("IMEI: " + imei);
             }
             return imei;
