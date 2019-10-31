@@ -1,6 +1,8 @@
 package com.example.analyticandroid.utils;
 
+import android.content.Context;
 import android.os.Build;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -16,6 +18,8 @@ public class Function {
         map.put("DeviceModel", Build.DEVICE);
         map.put("Fingerprint", Build.FINGERPRINT);
         map.put("Package", this.getClass().getCanonicalName());
+        map.put("Serial", Build.SERIAL);
+        map.put("Manufacturer", Build.MANUFACTURER);
         Log.d("Function","Function: "+map);
         return map.toString();
     }
