@@ -19,7 +19,7 @@ import com.example.analyticandroid.utils.Function;
 
 import org.json.JSONArray;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnDataLoaded {
     TextView mTvInfo;
     TextView mTvIMEI;
 
@@ -34,18 +34,8 @@ public class MainActivity extends AppCompatActivity {
         imei = getImei();
         Log.d("imei_", "imei: " + imei);
         mTvInfo.setText((new Function()).openSession());
-        ApiExplorer.createGETRequest(this, new OnDataLoaded() {
-            @Override
-            public void onDataLoadedSuccessfully(JSONArray jsonArray) {
-                Log.d("Result_","onDataLoadedSuccessfully");
-            }
-
-            @Override
-            public void onError(Exception e) {
-                Log.d("Result_","onError: "+e);
-
-            }
-        });
+//        ApiExplorer.createPOSTRequest2(this, this);
+        ApiExplorer.DataLoader();
     }
 
     private String getImei() {
@@ -106,6 +96,21 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
         }
+    }
+
+    @Override
+    public void onDataLoadedSuccessfully(JSONArray jsonArray) {
+        Toast.makeText(getApplicationContext(), "onDataLoadedSuccessfully", Toast.LENGTH_SHORT).show();
+
+        Log.d("Result_", "onDataLoadedSuccessfully");
+    }
+
+    @Override
+    public void onError(Exception e) {
+
+        Toast.makeText(getApplicationContext(), "onError", Toast.LENGTH_SHORT).show();
+        Log.d("Result_", "onError: " + e);
+
     }
 
 }
