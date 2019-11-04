@@ -1,27 +1,100 @@
 package com.example.analyticandroid.utils;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Build;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class Function {
-    public String openSession() {
+
+    public static String SYSTEMVERSION;
+    public static String DEVICEMODEL;
+    public static String FINGERPRINT;
+    public static String PACKAGE;
+    public static String BOARD;
+    public static String BRAND;
+    public static String DISPLAY;
+    public static String HARDWARE;
+    public static String HOST;
+    public static String ID;
+    public static String MANUFACTURER;
+    public static String MODEL;
+    public static String SERIAL;
+    public static String TAGS;
+    public static String PRODUCT;
+    public static String TYPE;
+    public static String APPNAME;
+    public static String VERSION;
+    public static String BUILDNUMBER;
+
+    public String openSession(Context context) {
         Log.d("Function", "openSession");
-        String info = "Android " + android.os.Build.VERSION.RELEASE + " \n\nDevice Model*: " + Build.DEVICE +
+        String sInfo = "Android " + android.os.Build.VERSION.RELEASE + " \n\nDevice Model*: " + Build.DEVICE +
                 "\n\nFingerprint*:" + Build.FINGERPRINT + "\n\nPackage: " + this.getClass().getCanonicalName();
+
+        PackageManager pm = context.getPackageManager();
+        PackageInfo info = new PackageInfo();
+        try {
+            info = pm.getPackageInfo(context.getPackageName(), 0);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
         Map<String, String> map = new HashMap<>();
+
         map.put("SystemVersion", android.os.Build.VERSION.RELEASE);
         map.put("DeviceModel", Build.DEVICE);
         map.put("Fingerprint", Build.FINGERPRINT);
         map.put("Package", this.getClass().getCanonicalName());
-        map.put("Serial", Build.SERIAL);
-        map.put("Manufacturer", Build.MANUFACTURER);
-        Log.d("Function","Function: "+map);
+        map.put("BOARD", Build.BOARD);
+        map.put("BRAND", Build.BRAND);
+        map.put("DISPLAY", Build.DISPLAY);
+        map.put("HARDWARE", Build.HARDWARE);
+        map.put("HOST", Build.HOST);
+        map.put("ID", Build.ID);
+        map.put("MANUFACTURER", Build.MANUFACTURER);
+        map.put("MODEL", Build.MODEL);
+        map.put("PRODUCT", Build.PRODUCT);
+
+        map.put("SERIAL", Build.SERIAL);
+        map.put("TAGS", Build.TAGS);
+        map.put("TYPE", Build.TYPE);
+        map.put("APPNAME", info.applicationInfo.loadLabel(pm).toString());
+        map.put("VERSION", info.versionName);
+        map.put("BUILDNUMBER", String.valueOf(getLongVersionCode(info)));
+        SYSTEMVERSION = map.get("SystemVersion");
+        DEVICEMODEL = map.get("DeviceModel");
+        FINGERPRINT = map.get("Fingerprint");
+        PACKAGE = map.get("Package");
+        BOARD = map.get("BOARD");
+        BRAND = map.get("BRAND");
+        DISPLAY = map.get("DISPLAY");
+        HARDWARE = map.get("HARDWARE");
+        HOST = map.get("HOST");
+        ID = map.get("ID");
+        MANUFACTURER = map.get("MANUFACTURER");
+        MODEL = map.get("MODEL");
+        PRODUCT = map.get("PRODUCT");
+        SERIAL = map.get("SERIAL");
+        TAGS = map.get("TAGS");
+        TYPE = map.get("TYPE");
+        APPNAME = map.get("APPNAME");
+        VERSION = map.get("VERSION");
+        BUILDNUMBER = map.get("BUILDNUMBER");
+
+        Log.d("Function", "Function: " + map);
         return map.toString();
+    }
+
+    private long getLongVersionCode(PackageInfo info) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            return info.getLongVersionCode();
+        }
+        return info.versionCode;
     }
 
     public void closeSession() {

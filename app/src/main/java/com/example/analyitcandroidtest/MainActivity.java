@@ -7,6 +7,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.util.Pair;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -21,21 +22,44 @@ import com.example.analyticandroid.utils.Function;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements OnDataLoaded {
     TextView mTvInfo;
     TextView mTvIMEI;
-
+    ArrayList<Pair<String,String>> infoList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        infoList = new ArrayList<>();
         mTvInfo = findViewById(R.id.tv_info);
-        mTvIMEI = findViewById(R.id.tv_imei);
         String imei = "";
         imei = getImei();
         Log.d("imei_", "imei: " + imei);
-        mTvInfo.setText((new Function()).openSession());
+        new Function().openSession(this);
+        infoList.add(new Pair<>("Appname: ", Function.APPNAME));
+        infoList.add(new Pair<>("Packge: ", Function.PACKAGE));
+        infoList.add(new Pair<>("Board: ", Function.BOARD));
+        infoList.add(new Pair<>("Brand: ", Function.BRAND));
+        infoList.add(new Pair<>("Build Number: ", Function.BUILDNUMBER));
+        infoList.add(new Pair<>("Device Model: ", Function.DEVICEMODEL));
+        infoList.add(new Pair<>("Finger print: ", Function.FINGERPRINT));
+        infoList.add(new Pair<>("Display: ", Function.DISPLAY));
+        infoList.add(new Pair<>("Hardware: ", Function.HARDWARE));
+        infoList.add(new Pair<>("Host ", Function.HOST));
+        infoList.add(new Pair<>("ID: ", Function.ID));
+        infoList.add(new Pair<>("Product: ", Function.PRODUCT));
+        infoList.add(new Pair<>("Model: ", Function.MODEL));
+        infoList.add(new Pair<>("Type: ", Function.TYPE));
+        infoList.add(new Pair<>("Tags: ", Function.TAGS));
+        infoList.add(new Pair<>("System version: ", Function.SYSTEMVERSION));
+        infoList.add(new Pair<>("IMEI: ", imei));
+
+        StringBuilder sInfo = new StringBuilder();
+        for(int i= 0 ;i < infoList.size() ; i++)
+            sInfo.append(infoList.get(i).first).append(infoList.get(i).second).append("\n\n");
+        mTvInfo.setText(sInfo.toString());
 //        ApiExplorer.createPOSTRequest2(this, this);
         ApiExplorer.DataLoader(this);
     }
@@ -47,7 +71,7 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded {
             String imei = telephonyManager.getImei();
             if (!imei.isEmpty()) {
                 Log.d("imei_", "123456");
-                mTvIMEI.setText("IMEI: " + imei);
+//                mTvIMEI.setText("IMEI: " + imei);
             }
             return imei;
         }
