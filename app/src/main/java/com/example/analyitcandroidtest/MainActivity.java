@@ -13,11 +13,13 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.analyticandroid.androidnetworking.error.ANError;
 import com.example.analyticandroid.network.ApiExplorer;
 import com.example.analyticandroid.network.OnDataLoaded;
 import com.example.analyticandroid.utils.Function;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity implements OnDataLoaded {
     TextView mTvInfo;
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded {
         Log.d("imei_", "imei: " + imei);
         mTvInfo.setText((new Function()).openSession());
 //        ApiExplorer.createPOSTRequest2(this, this);
-        ApiExplorer.DataLoader();
+        ApiExplorer.DataLoader(this);
     }
 
     private String getImei() {
@@ -99,14 +101,14 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded {
     }
 
     @Override
-    public void onDataLoadedSuccessfully(JSONArray jsonArray) {
+    public void onDataLoadedSuccessfully(JSONObject jsonArray) {
         Toast.makeText(getApplicationContext(), "onDataLoadedSuccessfully", Toast.LENGTH_SHORT).show();
 
         Log.d("Result_", "onDataLoadedSuccessfully");
     }
 
     @Override
-    public void onError(Exception e) {
+    public void onError(ANError e) {
 
         Toast.makeText(getApplicationContext(), "onError", Toast.LENGTH_SHORT).show();
         Log.d("Result_", "onError: " + e);
