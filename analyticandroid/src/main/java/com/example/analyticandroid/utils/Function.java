@@ -1,13 +1,16 @@
 package com.example.analyticandroid.utils;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.provider.Settings;
 import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class Function {
 
@@ -30,7 +33,10 @@ public class Function {
     public static String APPNAME;
     public static String VERSION;
     public static String BUILDNUMBER;
+    public static String UUID_APP;
+    public static String SECURE_ANDROID_ID;
 
+    @SuppressLint("HardwareIds")
     public String openSession(Context context) {
         Log.d("Function", "openSession");
         String sInfo = "Android " + android.os.Build.VERSION.RELEASE + " \n\nDevice Model*: " + Build.DEVICE +
@@ -43,11 +49,18 @@ public class Function {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        Log.d("UUID_", "UUID: " + UUID.randomUUID().toString());
+        Log.d("SecureID_", "SecureID: " + Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ANDROID_ID));
+
 
         Map<String, String> map = new HashMap<>();
 
         map.put("SystemVersion", android.os.Build.VERSION.RELEASE);
         map.put("DeviceModel", Build.DEVICE);
+        map.put("uuid", UUID.randomUUID().toString());
+        map.put("androidSecureId", Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ANDROID_ID));
         map.put("Fingerprint", Build.FINGERPRINT);
         map.put("Package", this.getClass().getCanonicalName());
         map.put("BOARD", Build.BOARD);
@@ -68,6 +81,7 @@ public class Function {
         map.put("BUILDNUMBER", String.valueOf(getLongVersionCode(info)));
         SYSTEMVERSION = map.get("SystemVersion");
         DEVICEMODEL = map.get("DeviceModel");
+        UUID_APP = map.get("uuid");
         FINGERPRINT = map.get("Fingerprint");
         PACKAGE = map.get("Package");
         BOARD = map.get("BOARD");
@@ -76,6 +90,7 @@ public class Function {
         HARDWARE = map.get("HARDWARE");
         HOST = map.get("HOST");
         ID = map.get("ID");
+        SECURE_ANDROID_ID = map.get("androidSecureId");
         MANUFACTURER = map.get("MANUFACTURER");
         MODEL = map.get("MODEL");
         PRODUCT = map.get("PRODUCT");

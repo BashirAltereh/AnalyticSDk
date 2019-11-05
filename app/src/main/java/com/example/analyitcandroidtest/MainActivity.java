@@ -40,6 +40,12 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded {
         new Function().openSession(this);
         infoList.add(new Pair<>("Appname: ", Function.APPNAME));
         infoList.add(new Pair<>("Packge: ", Function.PACKAGE));
+        infoList.add(new Pair<>("IMEI: ", imei));
+        infoList.add(new Pair<>("UUID: ", Function.UUID_APP));
+        infoList.add(new Pair<>("Secure Android ID: ", Function.SECURE_ANDROID_ID));
+        infoList.add(new Pair<>("Manufacturer: ", Function.MANUFACTURER));
+        infoList.add(new Pair<>("Serial: ", Function.SERIAL));
+        infoList.add(new Pair<>("Version: ", Function.VERSION));
         infoList.add(new Pair<>("Board: ", Function.BOARD));
         infoList.add(new Pair<>("Brand: ", Function.BRAND));
         infoList.add(new Pair<>("Build Number: ", Function.BUILDNUMBER));
@@ -54,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded {
         infoList.add(new Pair<>("Type: ", Function.TYPE));
         infoList.add(new Pair<>("Tags: ", Function.TAGS));
         infoList.add(new Pair<>("System version: ", Function.SYSTEMVERSION));
-        infoList.add(new Pair<>("IMEI: ", imei));
 
         StringBuilder sInfo = new StringBuilder();
         for(int i= 0 ;i < infoList.size() ; i++)
