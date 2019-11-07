@@ -60,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded {
         infoList.add(new Pair<>("Type: ", Function.TYPE));
         infoList.add(new Pair<>("Tags: ", Function.TAGS));
         infoList.add(new Pair<>("System version: ", Function.SYSTEMVERSION));
+        infoList.add(new Pair<>("Screen Width: ", Function.SCREEN_WIDTH));
+        infoList.add(new Pair<>("Screen Height: ", Function.SCREEN_HEIGHT));
 
         StringBuilder sInfo = new StringBuilder();
         for(int i= 0 ;i < infoList.size() ; i++)

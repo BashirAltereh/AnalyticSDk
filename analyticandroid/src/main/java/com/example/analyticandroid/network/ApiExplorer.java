@@ -18,7 +18,7 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ApiExplorer extends AsyncTask<String, Void, Bitmap> {
+public class ApiExplorer {
 
 //    public static void createGETRequest(Context context, final OnDataLoaded onDataLoaded) {
 //        ApiExplorer.execute(new Runnable() {
@@ -246,26 +246,6 @@ public class ApiExplorer extends AsyncTask<String, Void, Bitmap> {
 //    }
 
 
-    @Override
-    protected Bitmap doInBackground(String... strings) {
-        HttpURLConnection connection = null;
-
-        try {
-            Log.d("Result_", "11111");
-            connection = (HttpURLConnection) (new URL("https://api.androidhive.info/json/contacts.json")).openConnection();
-            Log.d("Result_", "22222");
-            connection.setRequestMethod("GET"); // or post
-            Log.d("Result_", "33333");
-            connection.connect();
-            Log.d("Result_", "44444");
-            InputStream is = connection.getInputStream();
-            Log.d("Result_", "Response: " + is.toString());
-        } catch (Exception e) {
-            Log.d("Result_", "Error: " + e);
-        }
-
-        return null;
-    }
 
     public static void DataLoader(final OnDataLoaded onDataLoaded) {
         Map<String,String> map = new HashMap<>();

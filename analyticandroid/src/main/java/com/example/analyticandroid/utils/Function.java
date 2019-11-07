@@ -1,11 +1,13 @@
 package com.example.analyticandroid.utils;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
 
 import java.util.HashMap;
@@ -35,12 +37,12 @@ public class Function {
     public static String BUILDNUMBER;
     public static String UUID_APP;
     public static String SECURE_ANDROID_ID;
+    public static String SCREEN_WIDTH;
+    public static String SCREEN_HEIGHT;
 
     @SuppressLint("HardwareIds")
     public String openSession(Context context) {
         Log.d("Function", "openSession");
-        String sInfo = "Android " + android.os.Build.VERSION.RELEASE + " \n\nDevice Model*: " + Build.DEVICE +
-                "\n\nFingerprint*:" + Build.FINGERPRINT + "\n\nPackage: " + this.getClass().getCanonicalName();
 
         PackageManager pm = context.getPackageManager();
         PackageInfo info = new PackageInfo();
@@ -49,6 +51,13 @@ public class Function {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
+        Activity activity = (Activity) context;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int height = displayMetrics.heightPixels;
+        int width = displayMetrics.widthPixels;
+
         Log.d("UUID_", "UUID: " + UUID.randomUUID().toString());
         Log.d("SecureID_", "SecureID: " + Settings.Secure.getString(context.getContentResolver(),
                 Settings.Secure.ANDROID_ID));
@@ -79,6 +88,9 @@ public class Function {
         map.put("APPNAME", info.applicationInfo.loadLabel(pm).toString());
         map.put("VERSION", info.versionName);
         map.put("BUILDNUMBER", String.valueOf(getLongVersionCode(info)));
+        map.put("screenWidth", String.valueOf(width));
+        map.put("screenHeight", String.valueOf(height));
+
         SYSTEMVERSION = map.get("SystemVersion");
         DEVICEMODEL = map.get("DeviceModel");
         UUID_APP = map.get("uuid");
@@ -100,6 +112,8 @@ public class Function {
         APPNAME = map.get("APPNAME");
         VERSION = map.get("VERSION");
         BUILDNUMBER = map.get("BUILDNUMBER");
+        SCREEN_WIDTH = map.get("screenWidth");
+        SCREEN_HEIGHT = map.get("screenHeight");
 
         Log.d("Function", "Function: " + map);
         return map.toString();
