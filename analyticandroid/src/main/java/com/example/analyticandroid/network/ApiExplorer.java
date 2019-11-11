@@ -1,20 +1,22 @@
 package com.example.analyticandroid.network;
 
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
+import android.content.Context;
+import android.os.Build;
 import android.util.Log;
 
+import androidx.annotation.RequiresApi;
+
+import com.example.analyticandroid.IO.CacheBloc;
 import com.example.analyticandroid.androidnetworking.AndroidNetworking;
 import com.example.analyticandroid.androidnetworking.common.Priority;
 import com.example.analyticandroid.androidnetworking.error.ANError;
 import com.example.analyticandroid.androidnetworking.interfaces.JSONObjectRequestListener;
+import com.example.analyticandroid.models.RequestModel;
+import com.example.analyticandroid.utils.DataFlowController;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -246,27 +248,31 @@ public class ApiExplorer {
 //    }
 
 
-
-    public static void DataLoader(final OnDataLoaded onDataLoaded) {
-        Map<String,String> map = new HashMap<>();
-        map.put("Content-Type","application/json");
-        map.put("language","1");
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("userId", "1");
-            jsonObject.put("appId", "41");
-            jsonObject.put("attributes", new JSONObject().put("deviceModel", "bashir"));
-
-
-            Log.d("Result_", "Body: " + jsonObject);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        AndroidNetworking.post(WebServiceURL.AddSessionUrl())
-                .addJSONObjectBody(jsonObject)
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public static void DataLoader(final Context context, final OnDataLoaded onDataLoaded, String url, Map<String, String> header, final JSONObject body, final RequestPriority priority) {
+        final Map<String, String> map = new HashMap<>();
+//        map.put("Content-Type","application/json");
+//        map.put("language","1");
+//        final JSONObject jsonObject = new JSONObject();
+//        try {
+//            jsonObject.put("userId", "1");
+//            jsonObject.put("appId", "41");
+//            jsonObject.put("attributes", new JSONObject().put("deviceModel", "bashir"));
+//
+//
+//            Log.d("Result_", "Body: " + jsonObject);
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+        DataFlowController.checkInternetSpeed(context);
+        Log.d("Result_","Priority"+priority.name());
+        DataFlowController.requestQueue.add(new RequestModel(url,header,body,priority));
+        Log.d("Result_","Queue size: "+ DataFlowController.requestQueue.size());
+        AndroidNetworking.post(url)
+                .addJSONObjectBody(body)
                 .setTag("test")
-                .addHeaders(map)
-                .setPriority(Priority.MEDIUM)
+                .addHeaders(header)
+                .setPriority(Priority.IMMEDIATE)
                 .build()
                 .getAsJSONObject(new JSONObjectRequestListener() {
                     @Override
@@ -280,7 +286,20 @@ public class ApiExplorer {
                     public void onError(ANError error) {
                         // handle error
                         Log.d("Result_", "onError: " + error);
+                        JSONObject cacheJson = new JSONObject();
+                        try {
+                            cacheJson.put("url", WebServiceURL.AddSessionUrl());
+                            cacheJson.put("body", body);
+                            cacheJson.put("header", map.toString());
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        CacheBloc.saveToPreferences(context, CacheBloc.REQUEST_CACHE, cacheJson.toString());
+
+                        String r = CacheBloc.readFromPreferences(context, CacheBloc.REQUEST_CACHE, "noooooo");
+                        Log.d("Result_", "cache: " + r);
                         onDataLoaded.onError(error);
+                        //TODO: save request body in cache and resend it when get connection again
                     }
                 });
     }

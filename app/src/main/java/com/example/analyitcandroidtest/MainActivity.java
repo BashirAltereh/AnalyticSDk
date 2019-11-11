@@ -3,6 +3,11 @@ package com.example.analyitcandroidtest;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
+import android.net.NetworkInfo;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -11,23 +16,31 @@ import android.util.Pair;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.analyticandroid.androidnetworking.error.ANError;
 import com.example.analyticandroid.network.ApiExplorer;
 import com.example.analyticandroid.network.OnDataLoaded;
+import com.example.analyticandroid.network.RequestPriority;
+import com.example.analyticandroid.network.WebServiceParams;
+import com.example.analyticandroid.network.WebServiceURL;
 import com.example.analyticandroid.utils.Function;
 
-import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements OnDataLoaded {
     TextView mTvInfo;
     TextView mTvIMEI;
-    ArrayList<Pair<String,String>> infoList;
+    ArrayList<Pair<String, String>> infoList;
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,11 +77,13 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded {
         infoList.add(new Pair<>("Screen Height: ", Function.SCREEN_HEIGHT));
 
         StringBuilder sInfo = new StringBuilder();
-        for(int i= 0 ;i < infoList.size() ; i++)
+        for (int i = 0; i < infoList.size(); i++)
             sInfo.append(infoList.get(i).first).append(infoList.get(i).second).append("\n\n");
         mTvInfo.setText(sInfo.toString());
-//        ApiExplorer.createPOSTRequest2(this, this);
-        ApiExplorer.DataLoader(this);
+
+
+
+
     }
 
     private String getImei() {

@@ -10,11 +10,21 @@ import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.example.analyticandroid.androidnetworking.error.ANError;
+import com.example.analyticandroid.network.ApiExplorer;
+import com.example.analyticandroid.network.OnDataLoaded;
+import com.example.analyticandroid.network.RequestPriority;
+import com.example.analyticandroid.network.WebServiceParams;
+import com.example.analyticandroid.network.WebServiceURL;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class Function {
+public class Function extends LifeCycle implements OnDataLoaded {
 
     public static String SYSTEMVERSION;
     public static String DEVICEMODEL;
@@ -43,7 +53,25 @@ public class Function {
     @SuppressLint("HardwareIds")
     public String openSession(Context context) {
         Log.d("Function", "openSession");
+        LifeCycle lifeCycle = new Function();
+        lifeCycle.initialize();
+        Map<String, String> map = getDeviceInfo(context);
 
+        Log.d("Function", "Function: " + map);
+        final Map<String, String> header = new HashMap<>();
+        header.put("Content-Type", "application/json");
+        header.put("language", "1");
+
+        try {
+            ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), header, WebServiceParams.openSessionParams("1", "41", new JSONObject().put("deviceModel", "bashir")), RequestPriority.IMMEDIATE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return map.toString();
+    }
+
+    private Map<String, String> getDeviceInfo(Context context) {
         PackageManager pm = context.getPackageManager();
         PackageInfo info = new PackageInfo();
         try {
@@ -65,7 +93,7 @@ public class Function {
 
         Map<String, String> map = new HashMap<>();
 
-        map.put("SystemVersion", android.os.Build.VERSION.RELEASE);
+        map.put("SystemVersion", Build.VERSION.RELEASE);
         map.put("DeviceModel", Build.DEVICE);
         map.put("uuid", UUID.randomUUID().toString());
         map.put("androidSecureId", Settings.Secure.getString(context.getContentResolver(),
@@ -114,9 +142,7 @@ public class Function {
         BUILDNUMBER = map.get("BUILDNUMBER");
         SCREEN_WIDTH = map.get("screenWidth");
         SCREEN_HEIGHT = map.get("screenHeight");
-
-        Log.d("Function", "Function: " + map);
-        return map.toString();
+        return map;
     }
 
     private long getLongVersionCode(PackageInfo info) {
@@ -136,5 +162,15 @@ public class Function {
 
     public void collectUserData() {
         Log.d("Function", "collectUserData");
+    }
+
+    @Override
+    public void onDataLoadedSuccessfully(JSONObject jsonObject) {
+
+    }
+
+    @Override
+    public void onError(ANError e) {
+
     }
 }
