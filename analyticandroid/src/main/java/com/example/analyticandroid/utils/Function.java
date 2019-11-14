@@ -20,6 +20,8 @@ import com.example.analyticandroid.network.WebServiceURL;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -79,7 +81,7 @@ public class Function extends LifeCycle implements OnDataLoaded {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
+        readJSonFile(context);
         Activity activity = (Activity) context;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -172,5 +174,22 @@ public class Function extends LifeCycle implements OnDataLoaded {
     @Override
     public void onError(ANError e) {
 
+    }
+
+
+
+    void readJSonFile(Context context){
+        String json = null;
+        try {
+            InputStream is = context.getAssets().open("sdk_conf.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+            json = new String(buffer, "UTF-8");
+            Log.d("jsonFile","json: "+json);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 }

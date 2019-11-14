@@ -19,7 +19,7 @@ import java.util.PriorityQueue;
 public class DataFlowController {
     public static PriorityQueue<RequestModel> requestQueue = new PriorityQueue<>();
 
-
+    //todo: under testing
     public static int checkInternetSpeed(Context context){
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
@@ -39,12 +39,14 @@ public class DataFlowController {
             WifiManager wifiManager = (WifiManager) context.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
             WifiInfo wifiInfo = wifiManager.getConnectionInfo();
             int linkSpeed = wifiInfo.getLinkSpeed();
+            String name = wifiInfo.getDetailedStateOf(wifiInfo.getSupplicantState()).name();
             int rssi = wifiManager.getConnectionInfo().getRssi();
 
             Log.d("Speed_", "downSpeed: " + downSpeed);
             Log.d("Speed_", "upSpeed: " + upSpeed);
             Log.d("Speed_", "linkSpeed: " + linkSpeed);
             Log.d("Speed_", "rssi: " + rssi);
+            Log.d("Speed_", "name: " + name);
         }
         return 0;
     }
