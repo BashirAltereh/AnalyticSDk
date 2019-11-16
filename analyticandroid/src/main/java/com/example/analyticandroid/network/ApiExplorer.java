@@ -248,22 +248,9 @@ public class ApiExplorer {
 //    }
 
 
-    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public static void DataLoader(final Context context, final OnDataLoaded onDataLoaded, String url, Map<String, String> header, final JSONObject body, final RequestPriority priority) {
         final Map<String, String> map = new HashMap<>();
-//        map.put("Content-Type","application/json");
-//        map.put("language","1");
-//        final JSONObject jsonObject = new JSONObject();
-//        try {
-//            jsonObject.put("userId", "1");
-//            jsonObject.put("appId", "41");
-//            jsonObject.put("attributes", new JSONObject().put("deviceModel", "bashir"));
-//
-//
-//            Log.d("Result_", "Body: " + jsonObject);
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+
         DataFlowController.checkInternetSpeed(context);
         Log.d("Result_","Priority"+priority.name());
         DataFlowController.requestQueue.add(new RequestModel(url,header,body,priority));

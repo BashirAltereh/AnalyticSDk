@@ -3,11 +3,6 @@ package com.example.analyitcandroidtest;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.net.ConnectivityManager;
-import android.net.NetworkCapabilities;
-import android.net.NetworkInfo;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
@@ -21,26 +16,19 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.example.analyticandroid.androidnetworking.error.ANError;
-import com.example.analyticandroid.network.ApiExplorer;
 import com.example.analyticandroid.network.OnDataLoaded;
-import com.example.analyticandroid.network.RequestPriority;
-import com.example.analyticandroid.network.WebServiceParams;
-import com.example.analyticandroid.network.WebServiceURL;
+import com.example.analyticandroid.utils.DataFlowController;
 import com.example.analyticandroid.utils.Function;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements OnDataLoaded {
-    TextView mTvInfo;
-    TextView mTvIMEI;
+public class MainActivity extends AppCompatActivity implements OnDataLoaded , DataFlowController.DataTraffic {
+    private TextView mTvInfo;
+    private TextView mTvTraffic;
     ArrayList<Pair<String, String>> infoList;
+
 
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -49,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded {
         setContentView(R.layout.activity_main);
         infoList = new ArrayList<>();
         mTvInfo = findViewById(R.id.tv_info);
+        mTvTraffic = findViewById(R.id.tv_traffic);
         String imei = "";
         imei = getImei();
         Log.d("imei_", "imei: " + imei);
@@ -83,6 +72,7 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded {
             sInfo.append(infoList.get(i).first).append(infoList.get(i).second).append("\n\n");
         mTvInfo.setText(sInfo.toString());
 
+        DataFlowController.trafficStats(this,this);
 
 //        readJSonFile();
 
@@ -163,4 +153,8 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded {
 
     }
 
+    @Override
+    public void OnDataTraffic(long rxBytes, long txBytes) {
+        mTvTraffic.setText("rxBytes: "+rxBytes+" KB , txBytes"+txBytes+" KB");
+    }
 }

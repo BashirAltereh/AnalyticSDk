@@ -1,12 +1,15 @@
 package com.example.analyticandroid.utils;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.TrafficStats;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
 import android.os.Build;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.RequiresApi;
@@ -18,6 +21,48 @@ import java.util.PriorityQueue;
 // todo:check idle
 public class DataFlowController {
     public static PriorityQueue<RequestModel> requestQueue = new PriorityQueue<>();
+
+    private static Handler mHandler = new Handler();
+    private static long mStartRX = 0;
+    private static  long mStartTX = 0;
+    static  DataTraffic dataTrafficLL;
+    public static void trafficStats(Context context, final DataTraffic dataTraffic){
+        dataTrafficLL = dataTraffic;
+        mStartRX = TrafficStats.getTotalRxBytes();
+        mStartTX = TrafficStats.getTotalTxBytes();
+
+        if (mStartRX == TrafficStats.UNSUPPORTED || mStartTX == TrafficStats.UNSUPPORTED) {
+            AlertDialog.Builder alert = new AlertDialog.Builder(context);
+            alert.setTitle("Uh Oh!");
+            alert.setMessage("Your device does not support traffic stat monitoring.");
+            alert.show();
+        } else {
+            mHandler.postDelayed(new Runnable() {
+                public void run() {
+                    long rxBytes = TrafficStats.getTotalRxBytes() - mStartRX;
+//            RX.setText(Long.toString(rxBytes));
+                    Log.d("Speed_ traffic","rxBytes: "+rxBytes);
+                    long txBytes = TrafficStats.getTotalTxBytes() - mStartTX;
+                    dataTraffic.OnDataTraffic(rxBytes,txBytes);
+//            TX.setText(Long.toString(txBytes));
+                    Log.d("Speed_ traffic","txBytes: "+rxBytes);
+                    mHandler.postDelayed(mRunnable, 1000);
+                }
+            }, 1000);
+        }
+    }
+    private static final Runnable mRunnable = new Runnable() {
+        public void run() {
+            long rxBytes = TrafficStats.getTotalRxBytes() - mStartRX;
+//            RX.setText(Long.toString(rxBytes));
+            Log.d("Speed_ traffic","rxBytes: "+rxBytes);
+            long txBytes = TrafficStats.getTotalTxBytes() - mStartTX;
+            dataTrafficLL.OnDataTraffic(rxBytes,txBytes);
+//            TX.setText(Long.toString(txBytes));
+            Log.d("Speed_ traffic","txBytes: "+rxBytes);
+            mHandler.postDelayed(mRunnable, 1000);
+        }
+    };
 
     //todo: under testing
     public static int checkInternetSpeed(Context context){
@@ -49,6 +94,10 @@ public class DataFlowController {
             Log.d("Speed_", "name: " + name);
         }
         return 0;
+    }
+
+   public interface DataTraffic{
+        void OnDataTraffic(long rxBytes , long txBytes);
     }
 
 }

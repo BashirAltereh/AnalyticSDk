@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -60,15 +61,15 @@ public class Function extends LifeCycle implements OnDataLoaded {
         Map<String, String> map = getDeviceInfo(context);
 
         Log.d("Function", "Function: " + map);
-        final Map<String, String> header = new HashMap<>();
-        header.put("Content-Type", "application/json");
-        header.put("language", "1");
 
         try {
-            ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), header, WebServiceParams.openSessionParams("1", "41", new JSONObject().put("deviceModel", "bashir")), RequestPriority.IMMEDIATE);
+            ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("1", "41", new JSONObject().put("deviceModel", "bashir")), RequestPriority.IMMEDIATE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        //todo: for testing
+        suspendSession(context);
 
         return map.toString();
     }
@@ -81,7 +82,7 @@ public class Function extends LifeCycle implements OnDataLoaded {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        readJSonFile(context);
+        readJsonFile(context);
         Activity activity = (Activity) context;
         DisplayMetrics displayMetrics = new DisplayMetrics();
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -154,12 +155,18 @@ public class Function extends LifeCycle implements OnDataLoaded {
         return info.versionCode;
     }
 
-    public void closeSession() {
+    public void closeSession(Context context) {
         Log.d("Function", "closeSession");
+        ApiExplorer.DataLoader(context, this, WebServiceURL.CloseSession(), WebServiceParams.getHeader(), WebServiceParams.susspendAndCloseSessionParams("456789"), RequestPriority.IMMEDIATE);
+
     }
 
-    public void suspendSession() {
-        Log.d("Function", "suspendSession");
+    public void suspendSession(Context context) {
+        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isScreenOn();
+        Log.d("Function", "suspendSession: " + isScreenOn);
+        ApiExplorer.DataLoader(context, this, WebServiceURL.SuspendSession(), WebServiceParams.getHeader(), WebServiceParams.susspendAndCloseSessionParams("456789"), RequestPriority.IMMEDIATE);
+        closeSession(context);
     }
 
     public void collectUserData() {
@@ -177,8 +184,7 @@ public class Function extends LifeCycle implements OnDataLoaded {
     }
 
 
-
-    void readJSonFile(Context context){
+    private void readJsonFile(Context context) {
         String json = null;
         try {
             InputStream is = context.getAssets().open("sdk_conf.json");
@@ -187,7 +193,7 @@ public class Function extends LifeCycle implements OnDataLoaded {
             is.read(buffer);
             is.close();
             json = new String(buffer, "UTF-8");
-            Log.d("jsonFile","json: "+json);
+            Log.d("jsonFile", "json: " + json);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
