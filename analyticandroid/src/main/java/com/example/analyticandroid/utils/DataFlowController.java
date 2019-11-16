@@ -57,7 +57,7 @@ public class DataFlowController {
 //            RX.setText(Long.toString(rxBytes));
             Log.d("Speed_ traffic","rxBytes: "+rxBytes);
             long txBytes = TrafficStats.getTotalTxBytes() - mStartTX;
-            dataTrafficLL.OnDataTraffic(rxBytes,txBytes);
+            dataTrafficLL.OnDataTraffic(rxBytes/1000,txBytes/1000);
 //            TX.setText(Long.toString(txBytes));
             Log.d("Speed_ traffic","txBytes: "+rxBytes);
             mHandler.postDelayed(mRunnable, 1000);
