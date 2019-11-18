@@ -155,6 +155,6 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded , Da
 
     @Override
     public void OnDataTraffic(long rxBytes, long txBytes) {
-        mTvTraffic.setText("rxBytes: "+rxBytes+" KB , txBytes"+txBytes+" KB");
+        mTvTraffic.setText("rxBytes: "+rxBytes+" KB/s , txBytes"+txBytes+" KB/s");
     }
 }

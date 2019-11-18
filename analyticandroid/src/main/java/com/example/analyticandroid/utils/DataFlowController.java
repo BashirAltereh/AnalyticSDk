@@ -23,6 +23,8 @@ public class DataFlowController {
     public static PriorityQueue<RequestModel> requestQueue = new PriorityQueue<>();
 
     private static Handler mHandler = new Handler();
+    private static long mPreviousRxBytes = 0;
+    private static  long mPreviousTxBytes = 0;
     private static long mStartRX = 0;
     private static  long mStartTX = 0;
     static  DataTraffic dataTrafficLL;
@@ -55,9 +57,13 @@ public class DataFlowController {
         public void run() {
             long rxBytes = TrafficStats.getTotalRxBytes() - mStartRX;
 //            RX.setText(Long.toString(rxBytes));
-            Log.d("Speed_ traffic","rxBytes: "+rxBytes);
+            Log.d("Speed_ traffic","rxBytes: "+rxBytes + " , mPreviousRxBytes: "+mPreviousRxBytes);
             long txBytes = TrafficStats.getTotalTxBytes() - mStartTX;
-            dataTrafficLL.OnDataTraffic(rxBytes/1000,txBytes/1000);
+            mPreviousRxBytes = rxBytes;
+            mPreviousTxBytes = txBytes;
+            rxBytes -= mPreviousRxBytes;
+            txBytes -= mPreviousTxBytes;
+            dataTrafficLL.OnDataTraffic(rxBytes,txBytes);
 //            TX.setText(Long.toString(txBytes));
             Log.d("Speed_ traffic","txBytes: "+rxBytes);
             mHandler.postDelayed(mRunnable, 1000);
