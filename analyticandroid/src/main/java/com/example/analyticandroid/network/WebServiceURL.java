@@ -3,7 +3,7 @@ package com.example.analyticandroid.network;
 public class WebServiceURL {
     private static String BASE_URL = "http://5.134.200.110:9090/Analytic_SDK_APIs/WS/SDK_WS/";
 
-    private static String ADD_SESSTION = "addSession";
+    private static String ADD_SESSTION = "Tracking/openSession";
 
     private static String SUSPEND_SESSION = "Tracking/suspendSession";
 

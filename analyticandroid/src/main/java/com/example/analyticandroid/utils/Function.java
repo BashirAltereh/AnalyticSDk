@@ -2,16 +2,23 @@ package com.example.analyticandroid.utils;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
+import android.os.IBinder;
 import android.os.PowerManager;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
 
+import com.example.analyticandroid.ILayerService;
 import com.example.analyticandroid.androidnetworking.error.ANError;
+import com.example.analyticandroid.internetSpeedMeter.datastats.datastats.LayerService;
+import com.example.analyticandroid.internetSpeedMeter.datastats.util.MyLog;
 import com.example.analyticandroid.network.ApiExplorer;
 import com.example.analyticandroid.network.OnDataLoaded;
 import com.example.analyticandroid.network.RequestPriority;
@@ -26,6 +33,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+
+
 
 public class Function extends LifeCycle implements OnDataLoaded {
 
@@ -63,7 +72,7 @@ public class Function extends LifeCycle implements OnDataLoaded {
         Log.d("Function", "Function: " + map);
 
         try {
-            ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("1", "41", new JSONObject().put("deviceModel", "bashir")), RequestPriority.IMMEDIATE);
+            ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("","bashir",1,"damascus",1,41, new JSONObject().put("deviceModel", "bashir")), RequestPriority.IMMEDIATE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -145,7 +154,46 @@ public class Function extends LifeCycle implements OnDataLoaded {
         BUILDNUMBER = map.get("BUILDNUMBER");
         SCREEN_WIDTH = map.get("screenWidth");
         SCREEN_HEIGHT = map.get("screenHeight");
+        doBindService(context);
         return map;
+    }
+    private ILayerService mServiceIF = null;
+
+    ServiceConnection mServiceConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
+
+//            MyLog.d("onServiceConnected["+componentName);
+
+            mServiceIF = ILayerService.Stub.asInterface(iBinder);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+//            MyLog.d("onServiceDisconnected["+componentName);
+
+            mServiceIF = null;
+        }
+    };
+
+    private void doBindService(Context context) {
+
+        Intent serviceIntent = new Intent(context, LayerService.class);
+
+        // start
+//        MyLog.d("MainActivity: startService of LayerService");
+        Log.d("services_","MainActivity: startService ");
+        if (Build.VERSION.SDK_INT >= 26) {
+            context.startForegroundService(serviceIntent);
+        } else {
+            context.startService(serviceIntent);
+        }
+
+        // bind
+//        MyLog.d("MainActivity: bindService of LayerService");
+        Log.d("services_","MainActivity: bindService of LayerService ");
+        context.bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
     private long getLongVersionCode(PackageInfo info) {

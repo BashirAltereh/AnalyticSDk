@@ -248,7 +248,7 @@ public class ApiExplorer {
 //    }
 
 
-    public static void DataLoader(final Context context, final OnDataLoaded onDataLoaded, String url, Map<String, String> header, final JSONObject body, final RequestPriority priority) {
+    public static void DataLoader(final Context context, final OnDataLoaded onDataLoaded, String url, final Map<String, String> header, final JSONObject body, final RequestPriority priority) {
         final Map<String, String> map = new HashMap<>();
 
         DataFlowController.checkInternetSpeed(context);
@@ -277,7 +277,7 @@ public class ApiExplorer {
                         try {
                             cacheJson.put("url", WebServiceURL.AddSessionUrl());
                             cacheJson.put("body", body);
-                            cacheJson.put("header", map.toString());
+                            cacheJson.put("header", header.toString());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

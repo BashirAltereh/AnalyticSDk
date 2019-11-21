@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 29
@@ -37,4 +39,9 @@ dependencies {
     compile "com.squareup.okhttp3:okhttp:3.10.0"
     compile "com.google.code.gson:gson:2.8.2"
     compile "com.android.support:appcompat-v7:27.1.1"
+    compile "androidx.core:core-ktx:+"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+}
+repositories {
+    mavenCentral()
 }

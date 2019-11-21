@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class WebServiceParams {
 
-    public static Map<String,String> getHeader(){
+    public static Map<String, String> getHeader() {
         final Map<String, String> header = new HashMap<>();
         header.put("Content-Type", "application/json");
         header.put("language", "1");
@@ -18,11 +18,17 @@ public class WebServiceParams {
 
     }
 
-    public static JSONObject openSessionParams(String userId,String appId,JSONObject attributes){
+    public static JSONObject openSessionParams(String sessionKey, String username,
+                                               int genderId, String address,int userId
+            ,int appId, JSONObject attributes) {
         final JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("userId", "1");
-            jsonObject.put("appId", "41");
+            jsonObject.put("sessionKey", sessionKey);
+            jsonObject.put("username", username);
+            jsonObject.put("genderId", genderId);
+            jsonObject.put("address", address);
+            jsonObject.put("userId", userId);
+            jsonObject.put("appId", appId);
             jsonObject.put("attributes", attributes);
 
 
@@ -33,10 +39,10 @@ public class WebServiceParams {
         return jsonObject;
     }
 
-    public static JSONObject susspendAndCloseSessionParams(String sessionKey){
+    public static JSONObject susspendAndCloseSessionParams(String sessionKey) {
         final JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("sessionKey",sessionKey);
+            jsonObject.put("sessionKey", sessionKey);
         } catch (JSONException e) {
             e.printStackTrace();
         }
