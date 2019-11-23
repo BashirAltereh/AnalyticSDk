@@ -1,10 +1,7 @@
 package com.example.analyticandroid.network;
 
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
 
 import com.example.analyticandroid.IO.CacheBloc;
 import com.example.analyticandroid.androidnetworking.AndroidNetworking;
@@ -250,11 +247,13 @@ public class ApiExplorer {
 
     public static void DataLoader(final Context context, final OnDataLoaded onDataLoaded, String url, final Map<String, String> header, final JSONObject body, final RequestPriority priority) {
         final Map<String, String> map = new HashMap<>();
+        Log.d("Result_", "URL: " + url);
 
-        DataFlowController.checkInternetSpeed(context);
-        Log.d("Result_","Priority"+priority.name());
-        DataFlowController.requestQueue.add(new RequestModel(url,header,body,priority));
-        Log.d("Result_","Queue size: "+ DataFlowController.requestQueue.size());
+//        if (context != null)
+//            DataFlowController.checkInternetSpeed(context);
+        Log.d("Result_", "Priority" + priority.name());
+        DataFlowController.requestQueue.add(new RequestModel(url, header, body, priority));
+        Log.d("Result_", "Queue size: " + DataFlowController.requestQueue.size());
         AndroidNetworking.post(url)
                 .addJSONObjectBody(body)
                 .setTag("test")
@@ -281,10 +280,12 @@ public class ApiExplorer {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        CacheBloc.saveToPreferences(context, CacheBloc.REQUEST_CACHE, cacheJson.toString());
+                        if (context != null) {
+                            CacheBloc.saveToPreferences(context, CacheBloc.REQUEST_CACHE, cacheJson.toString());
 
-                        String r = CacheBloc.readFromPreferences(context, CacheBloc.REQUEST_CACHE, "noooooo");
-                        Log.d("Result_", "cache: " + r);
+                            String r = CacheBloc.readFromPreferences(context, CacheBloc.REQUEST_CACHE, "noooooo");
+                            Log.d("Result_", "cache: " + r);
+                        }
                         onDataLoaded.onError(error);
                         //TODO: save request body in cache and resend it when get connection again
                     }

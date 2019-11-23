@@ -2,12 +2,14 @@ package com.example.analyitcandroidtest;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.Pair;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +26,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity implements OnDataLoaded , DataFlowController.DataTraffic {
+public class MainActivity extends AppCompatActivity implements OnDataLoaded , DataFlowController.DataTraffic, View.OnClickListener {
     private TextView mTvInfo;
     private TextView mTvTraffic;
     ArrayList<Pair<String, String>> infoList;
@@ -73,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded , Da
         mTvInfo.setText(sInfo.toString());
 
         DataFlowController.trafficStats(this,this);
-
+        mTvTraffic.setOnClickListener(this);
 //        readJSonFile();
 
     }
@@ -156,5 +158,13 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded , Da
     @Override
     public void OnDataTraffic(long rxBytes, long txBytes) {
         mTvTraffic.setText("rxBytes: "+rxBytes+" KB/s , txBytes"+txBytes+" KB/s");
+    }
+
+    @Override
+    public void onClick(View view) {
+        Intent intent = new Intent(this,Main2Activity.class);
+        intent.putExtra("name","Bashri");
+        startActivity(intent);
+
     }
 }
