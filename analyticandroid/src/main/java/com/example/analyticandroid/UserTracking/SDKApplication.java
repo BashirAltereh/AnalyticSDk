@@ -1,9 +1,10 @@
-package com.example.analyticandroid.UserTarking;
+package com.example.analyticandroid.UserTracking;
 
 import android.app.Application;
+import android.content.Context;
+import android.os.PowerManager;
 import android.util.Log;
-
-import com.example.analyticandroid.UserTarking.LifecycleDelegate;
+import android.widget.Toast;
 
 public class SDKApplication extends Application implements LifecycleDelegate {
 
@@ -21,6 +22,7 @@ public class SDKApplication extends Application implements LifecycleDelegate {
     @Override
     public void onAppBackgrounded() {
         Log.d("AppLifecycleHandler","---onAppBackgrounded");
+        Toast.makeText(this, "SuspendSession", Toast.LENGTH_SHORT).show();
 
     }
 

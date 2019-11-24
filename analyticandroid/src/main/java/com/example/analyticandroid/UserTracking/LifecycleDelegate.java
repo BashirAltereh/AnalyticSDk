@@ -1,4 +1,4 @@
-package com.example.analyticandroid.UserTarking;
+package com.example.analyticandroid.UserTracking;
 
 public interface LifecycleDelegate {
     void onAppBackgrounded();

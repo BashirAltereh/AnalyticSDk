@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.util.Pair;
@@ -166,5 +167,15 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded , Da
         intent.putExtra("name","Bashri");
         startActivity(intent);
 
+    }
+
+    @Override
+    protected void onStop() {
+
+        Log.d("Function", "onStop- ");
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        boolean isScreenOn = pm.isScreenOn();
+        Log.d("Function", "suspendSession: " + isScreenOn);
+        super.onStop();
     }
 }
