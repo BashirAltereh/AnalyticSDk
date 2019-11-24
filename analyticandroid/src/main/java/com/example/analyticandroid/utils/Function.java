@@ -1,7 +1,6 @@
 package com.example.analyticandroid.utils;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,15 +9,12 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.IBinder;
-import android.os.PowerManager;
 import android.provider.Settings;
-import android.util.DisplayMetrics;
 import android.util.Log;
 
 import com.example.analyticandroid.ILayerService;
 import com.example.analyticandroid.androidnetworking.error.ANError;
 import com.example.analyticandroid.internetSpeedMeter.datastats.datastats.LayerService;
-import com.example.analyticandroid.internetSpeedMeter.datastats.util.MyLog;
 import com.example.analyticandroid.network.ApiExplorer;
 import com.example.analyticandroid.network.OnDataLoaded;
 import com.example.analyticandroid.network.RequestPriority;
@@ -35,8 +31,7 @@ import java.util.Map;
 import java.util.UUID;
 
 
-
-public class Function extends LifeCycle implements OnDataLoaded {
+public class Function implements OnDataLoaded {
 
     public static String SYSTEMVERSION;
     public static String DEVICEMODEL;
@@ -65,23 +60,19 @@ public class Function extends LifeCycle implements OnDataLoaded {
     @SuppressLint("HardwareIds")
     public String openSession(Context context) {
         Log.d("Function", "openSession");
-        LifeCycle lifeCycle = new Function();
-        lifeCycle.initialize();
         Map<String, String> map = getDeviceInfo(context);
 
         Log.d("Function", "Function: " + map);
 
         try {
-            ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("","bashir",1,"damascus",1,41, new JSONObject().put("deviceModel", "bashir")), RequestPriority.IMMEDIATE);
+            ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("", "bashir", 1, "damascus", 1, 41, new JSONObject().put("deviceModel", "bashir")), RequestPriority.IMMEDIATE);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        //todo: for testing
-        suspendSession(context);
-
         return map.toString();
     }
+
 
     private Map<String, String> getDeviceInfo(Context context) {
         PackageManager pm = context.getPackageManager();
@@ -92,11 +83,11 @@ public class Function extends LifeCycle implements OnDataLoaded {
             e.printStackTrace();
         }
         readJsonFile(context);
-        Activity activity = (Activity) context;
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int height = displayMetrics.heightPixels;
-        int width = displayMetrics.widthPixels;
+//        Activity activity = (Activity) context;
+//        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+//        int height = displayMetrics.heightPixels;
+//        int width = displayMetrics.widthPixels;
 
         Log.d("UUID_", "UUID: " + UUID.randomUUID().toString());
         Log.d("SecureID_", "SecureID: " + Settings.Secure.getString(context.getContentResolver(),
@@ -128,8 +119,8 @@ public class Function extends LifeCycle implements OnDataLoaded {
         map.put("APPNAME", info.applicationInfo.loadLabel(pm).toString());
         map.put("VERSION", info.versionName);
         map.put("BUILDNUMBER", String.valueOf(getLongVersionCode(info)));
-        map.put("screenWidth", String.valueOf(width));
-        map.put("screenHeight", String.valueOf(height));
+//        map.put("screenWidth", String.valueOf(width));
+//        map.put("screenHeight", String.valueOf(height));
 
         SYSTEMVERSION = map.get("SystemVersion");
         DEVICEMODEL = map.get("DeviceModel");
@@ -157,6 +148,7 @@ public class Function extends LifeCycle implements OnDataLoaded {
         doBindService(context);
         return map;
     }
+
     private ILayerService mServiceIF = null;
 
     ServiceConnection mServiceConnection = new ServiceConnection() {
@@ -183,7 +175,7 @@ public class Function extends LifeCycle implements OnDataLoaded {
 
         // start
 //        MyLog.d("MainActivity: startService of LayerService");
-        Log.d("services_","MainActivity: startService ");
+        Log.d("services_", "MainActivity: startService ");
         if (Build.VERSION.SDK_INT >= 26) {
             context.startForegroundService(serviceIntent);
         } else {
@@ -192,7 +184,7 @@ public class Function extends LifeCycle implements OnDataLoaded {
 
         // bind
 //        MyLog.d("MainActivity: bindService of LayerService");
-        Log.d("services_","MainActivity: bindService of LayerService ");
+        Log.d("services_", "MainActivity: bindService of LayerService ");
         context.bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -210,11 +202,7 @@ public class Function extends LifeCycle implements OnDataLoaded {
     }
 
     public void suspendSession(Context context) {
-        PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        boolean isScreenOn = pm.isScreenOn();
-        Log.d("Function", "suspendSession: " + isScreenOn);
         ApiExplorer.DataLoader(context, this, WebServiceURL.SuspendSession(), WebServiceParams.getHeader(), WebServiceParams.susspendAndCloseSessionParams("456789"), RequestPriority.IMMEDIATE);
-        closeSession(context);
     }
 
     public void collectUserData() {

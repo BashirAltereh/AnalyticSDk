@@ -44,7 +44,6 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded , Da
         String imei = "";
         imei = getImei();
         Log.d("imei_", "imei: " + imei);
-        new Function().openSession(this);
         infoList.add(new Pair<>("Appname: ", Function.APPNAME));
         infoList.add(new Pair<>("Packge: ", Function.PACKAGE));
         infoList.add(new Pair<>("IMEI: ", imei));
