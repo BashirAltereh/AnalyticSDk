@@ -67,6 +67,7 @@ public class AppLifecycleHandler implements Application.ActivityLifecycleCallbac
     public void onActivityStopped(@NonNull Activity activity) {
         Log.d("AppLifecycleHandler", "---onActivityStopped");
         PowerManager pm = (PowerManager) ((Context) activity).getSystemService(Context.POWER_SERVICE);
+        assert pm != null;
         boolean isScreenOn = pm.isScreenOn();
         Log.d("AppLifecycleHandler", "---onActivityStopped: " + isScreenOn);
         if (!isScreenOn) {
@@ -87,8 +88,6 @@ public class AppLifecycleHandler implements Application.ActivityLifecycleCallbac
     public void onActivityDestroyed(@NonNull Activity activity) {
         Log.d("AppLifecycleHandler", "---onActivityDestroyed: " + appInBackground);
         if (appInBackground) {
-            //todo: call close session
-//            Toast.makeText(activity, "CloseSession", Toast.LENGTH_SHORT).show();
             sdkLifeCycle.dispose();
             Log.d("AppLifecycleHandler", "-----------------------------------------------------CloseSession");
 

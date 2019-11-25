@@ -12,18 +12,10 @@ import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
-
-import com.example.analyticandroid.androidnetworking.error.ANError;
-import com.example.analyticandroid.network.OnDataLoaded;
-import com.example.analyticandroid.utils.DataFlowController;
-import com.example.analyticandroid.utils.Function;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -31,7 +23,7 @@ import java.util.ArrayList;
  * For testing
  * */
 
-public class MainActivity extends AppCompatActivity implements OnDataLoaded , DataFlowController.DataTraffic, View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements  View.OnClickListener {
     private TextView mTvInfo;
     private TextView mTvTraffic;
     ArrayList<Pair<String, String>> infoList;
@@ -42,45 +34,45 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded , Da
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        infoList = new ArrayList<>();
-        mTvInfo = findViewById(R.id.tv_info);
-        mTvTraffic = findViewById(R.id.tv_traffic);
-        String imei = "";
-        imei = getImei();
-        Log.d("imei_", "imei: " + imei);
-        infoList.add(new Pair<>("Appname: ", Function.APPNAME));
-        infoList.add(new Pair<>("Packge: ", Function.PACKAGE));
-        infoList.add(new Pair<>("IMEI: ", imei));
-        infoList.add(new Pair<>("UUID: ", Function.UUID_APP));
-        infoList.add(new Pair<>("Secure Android ID: ", Function.SECURE_ANDROID_ID));
-        infoList.add(new Pair<>("Manufacturer: ", Function.MANUFACTURER));
-        infoList.add(new Pair<>("Serial: ", Function.SERIAL));
-        infoList.add(new Pair<>("Version: ", Function.VERSION));
-        infoList.add(new Pair<>("Board: ", Function.BOARD));
-        infoList.add(new Pair<>("Brand: ", Function.BRAND));
-        infoList.add(new Pair<>("Build Number: ", Function.BUILDNUMBER));
-        infoList.add(new Pair<>("Device Model: ", Function.DEVICEMODEL));
-        infoList.add(new Pair<>("Finger print: ", Function.FINGERPRINT));
-        infoList.add(new Pair<>("Display: ", Function.DISPLAY));
-        infoList.add(new Pair<>("Hardware: ", Function.HARDWARE));
-        infoList.add(new Pair<>("Host ", Function.HOST));
-        infoList.add(new Pair<>("ID: ", Function.ID));
-        infoList.add(new Pair<>("Product: ", Function.PRODUCT));
-        infoList.add(new Pair<>("Model: ", Function.MODEL));
-        infoList.add(new Pair<>("Type: ", Function.TYPE));
-        infoList.add(new Pair<>("Tags: ", Function.TAGS));
-        infoList.add(new Pair<>("System version: ", Function.SYSTEMVERSION));
-        infoList.add(new Pair<>("Screen Width: ", Function.SCREEN_WIDTH));
-        infoList.add(new Pair<>("Screen Height: ", Function.SCREEN_HEIGHT));
-
-        StringBuilder sInfo = new StringBuilder();
-        for (int i = 0; i < infoList.size(); i++)
-            sInfo.append(infoList.get(i).first).append(infoList.get(i).second).append("\n\n");
-        mTvInfo.setText(sInfo.toString());
-
-//        DataFlowController.trafficStats(this,this);
-        mTvTraffic.setOnClickListener(this);
-//        readJSonFile();
+//        infoList = new ArrayList<>();
+//        mTvInfo = findViewById(R.id.tv_info);
+//        mTvTraffic = findViewById(R.id.tv_traffic);
+//        String imei = "";
+//        imei = getImei();
+//        Log.d("imei_", "imei: " + imei);
+//        infoList.add(new Pair<>("Appname: ", Function.APPNAME));
+//        infoList.add(new Pair<>("Packge: ", Function.PACKAGE));
+//        infoList.add(new Pair<>("IMEI: ", imei));
+//        infoList.add(new Pair<>("UUID: ", Function.UUID_APP));
+//        infoList.add(new Pair<>("Secure Android ID: ", Function.SECURE_ANDROID_ID));
+//        infoList.add(new Pair<>("Manufacturer: ", Function.MANUFACTURER));
+//        infoList.add(new Pair<>("Serial: ", Function.SERIAL));
+//        infoList.add(new Pair<>("Version: ", Function.VERSION));
+//        infoList.add(new Pair<>("Board: ", Function.BOARD));
+//        infoList.add(new Pair<>("Brand: ", Function.BRAND));
+//        infoList.add(new Pair<>("Build Number: ", Function.BUILDNUMBER));
+//        infoList.add(new Pair<>("Device Model: ", Function.DEVICEMODEL));
+//        infoList.add(new Pair<>("Finger print: ", Function.FINGERPRINT));
+//        infoList.add(new Pair<>("Display: ", Function.DISPLAY));
+//        infoList.add(new Pair<>("Hardware: ", Function.HARDWARE));
+//        infoList.add(new Pair<>("Host ", Function.HOST));
+//        infoList.add(new Pair<>("ID: ", Function.ID));
+//        infoList.add(new Pair<>("Product: ", Function.PRODUCT));
+//        infoList.add(new Pair<>("Model: ", Function.MODEL));
+//        infoList.add(new Pair<>("Type: ", Function.TYPE));
+//        infoList.add(new Pair<>("Tags: ", Function.TAGS));
+//        infoList.add(new Pair<>("System version: ", Function.SYSTEMVERSION));
+//        infoList.add(new Pair<>("Screen Width: ", Function.SCREEN_WIDTH));
+//        infoList.add(new Pair<>("Screen Height: ", Function.SCREEN_HEIGHT));
+//
+//        StringBuilder sInfo = new StringBuilder();
+//        for (int i = 0; i < infoList.size(); i++)
+//            sInfo.append(infoList.get(i).first).append(infoList.get(i).second).append("\n\n");
+//        mTvInfo.setText(sInfo.toString());
+//
+////        DataFlowController.trafficStats(this,this);
+//        mTvTraffic.setOnClickListener(this);
+////        readJSonFile();
 
     }
 
@@ -144,25 +136,25 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded , Da
         }
     }
 
-    @Override
-    public void onDataLoadedSuccessfully(JSONObject jsonArray) {
-        Toast.makeText(getApplicationContext(), "onDataLoadedSuccessfully", Toast.LENGTH_SHORT).show();
-
-        Log.d("Result_", "onDataLoadedSuccessfully");
-    }
-
-    @Override
-    public void onError(ANError e) {
-
-        Toast.makeText(getApplicationContext(), "onError", Toast.LENGTH_SHORT).show();
-        Log.d("Result_", "onError: " + e);
-
-    }
-
-    @Override
-    public void OnDataTraffic(long rxBytes, long txBytes) {
-        mTvTraffic.setText("rxBytes: "+rxBytes+" KB/s , txBytes"+txBytes+" KB/s");
-    }
+//    @Override
+//    public void onDataLoadedSuccessfully(JSONObject jsonArray) {
+//        Toast.makeText(getApplicationContext(), "onDataLoadedSuccessfully", Toast.LENGTH_SHORT).show();
+//
+//        Log.d("Result_", "onDataLoadedSuccessfully");
+//    }
+//
+//    @Override
+//    public void onError(ANError e) {
+//
+//        Toast.makeText(getApplicationContext(), "onError", Toast.LENGTH_SHORT).show();
+//        Log.d("Result_", "onError: " + e);
+//
+//    }
+//
+//    @Override
+//    public void OnDataTraffic(long rxBytes, long txBytes) {
+//        mTvTraffic.setText("rxBytes: "+rxBytes+" KB/s , txBytes"+txBytes+" KB/s");
+//    }
 
     @Override
     public void onClick(View view) {
