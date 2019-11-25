@@ -1,12 +1,14 @@
 package com.example.analyticandroid.utils;
 
-import android.util.Log;
+/**
+ * Created by BashirAltereh on 11/2/2019.
+ */
 
 public interface SDKLifeCycle {
 
-    public void initialize();
+     void initialize();
 
-    public void dispose();
+    void dispose();
 
-    public void suspend();
+    void suspend();
 }

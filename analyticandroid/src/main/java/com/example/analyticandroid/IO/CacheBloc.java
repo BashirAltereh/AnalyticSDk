@@ -4,6 +4,10 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
+/**
+ * Created by BashirAltereh on 10/29/2019.
+ */
+
 public class CacheBloc {
 
     public static final String REQUEST_CACHE = "RequestCache";

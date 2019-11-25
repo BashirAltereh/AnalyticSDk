@@ -27,6 +27,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+/**
+ * For testing
+ * */
+
 public class MainActivity extends AppCompatActivity implements OnDataLoaded , DataFlowController.DataTraffic, View.OnClickListener {
     private TextView mTvInfo;
     private TextView mTvTraffic;
@@ -74,7 +78,7 @@ public class MainActivity extends AppCompatActivity implements OnDataLoaded , Da
             sInfo.append(infoList.get(i).first).append(infoList.get(i).second).append("\n\n");
         mTvInfo.setText(sInfo.toString());
 
-        DataFlowController.trafficStats(this,this);
+//        DataFlowController.trafficStats(this,this);
         mTvTraffic.setOnClickListener(this);
 //        readJSonFile();
 

@@ -18,6 +18,10 @@ import com.example.analyticandroid.models.RequestModel;
 
 import java.util.PriorityQueue;
 
+/**
+ * Created by BashirAltereh on 10/31/2019.
+ */
+
 // todo:check idle
 public class DataFlowController {
     public static PriorityQueue<RequestModel> requestQueue = new PriorityQueue<>();
@@ -107,7 +111,3 @@ public class DataFlowController {
     }
 
 }
-//D/Speed_: downSpeed: 1048576
-//        upSpeed: 1048576
-//        D/Speed_: linkSpeed: 72
-//        rssi: -49

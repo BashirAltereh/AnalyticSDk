@@ -7,6 +7,10 @@ import android.widget.Toast;
 import com.example.analyticandroid.utils.Function;
 import com.example.analyticandroid.utils.SDKLifeCycle;
 
+/**
+ * Created by BashirAltereh on 11/23/2019.
+ */
+
 public class SDKApplication extends Application implements LifecycleDelegate, SDKLifeCycle {
 
     @Override

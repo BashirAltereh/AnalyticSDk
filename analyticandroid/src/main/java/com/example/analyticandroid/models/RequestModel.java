@@ -6,6 +6,10 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
+/**
+ * Created by BashirAltereh on 10/29/2019.
+ */
+
 public class RequestModel implements Comparable<RequestModel> {
     private String url;
     private JSONObject body;

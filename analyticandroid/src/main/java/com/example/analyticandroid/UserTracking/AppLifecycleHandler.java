@@ -8,22 +8,15 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.PowerManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.example.analyticandroid.androidnetworking.error.ANError;
-import com.example.analyticandroid.network.ApiExplorer;
-import com.example.analyticandroid.network.OnDataLoaded;
-import com.example.analyticandroid.network.RequestPriority;
-import com.example.analyticandroid.network.WebServiceParams;
-import com.example.analyticandroid.network.WebServiceURL;
 import com.example.analyticandroid.utils.SDKLifeCycle;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
+/**
+ * Created by BashirAltereh on 11/23/2019.
+ */
 
 public class AppLifecycleHandler implements Application.ActivityLifecycleCallbacks, ComponentCallbacks2 {
     private LifecycleDelegate lifecycleDelegate;
@@ -81,18 +74,6 @@ public class AppLifecycleHandler implements Application.ActivityLifecycleCallbac
             Log.d("AppLifecycleHandler", "-----------------------------------------------------SuspendSession");
             appInBackground = true;
             appInForeground = false;
-//            ApiExplorer.DataLoader(null, new OnDataLoaded() {
-//                @Override
-//                public void onDataLoadedSuccessfully(JSONObject jsonObject) {
-//
-//                }
-//
-//                @Override
-//                public void onError(ANError e) {
-//
-//                }
-//            }, WebServiceURL.SuspendSession(), WebServiceParams.getHeader(), WebServiceParams.susspendAndCloseSessionParams("12345"), RequestPriority.IMMEDIATE);
-
         }
     }
 
@@ -111,18 +92,6 @@ public class AppLifecycleHandler implements Application.ActivityLifecycleCallbac
             sdkLifeCycle.dispose();
             Log.d("AppLifecycleHandler", "-----------------------------------------------------CloseSession");
 
-//            ApiExplorer.DataLoader(activity, new OnDataLoaded() {
-//                @Override
-//                public void onDataLoadedSuccessfully(JSONObject jsonObject) {
-//
-//                }
-//
-//                @Override
-//                public void onError(ANError e) {
-//
-//                }
-//            }, WebServiceURL.CloseSession(), WebServiceParams.getHeader(), WebServiceParams.susspendAndCloseSessionParams("12345"), RequestPriority.IMMEDIATE);
-
         }
     }
 
@@ -134,18 +103,6 @@ public class AppLifecycleHandler implements Application.ActivityLifecycleCallbac
             // lifecycleDelegate instance was passed in on the constructor
             Log.d("AppLifecycleHandler", "-----------------------------------------------------SuspendSession");
             sdkLifeCycle.suspend();
-//            ApiExplorer.DataLoader(null, new OnDataLoaded() {
-//                @Override
-//                public void onDataLoadedSuccessfully(JSONObject jsonObject) {
-//
-//                }
-//
-//                @Override
-//                public void onError(ANError e) {
-//
-//                }
-//            }, WebServiceURL.SuspendSession(), WebServiceParams.getHeader(), WebServiceParams.susspendAndCloseSessionParams("12345"), RequestPriority.IMMEDIATE);
-
             appInBackground = true;
             lifecycleDelegate.onAppBackgrounded();
         }

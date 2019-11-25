@@ -8,6 +8,10 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Created by BashirAltereh on 10/31/2019.
+ */
+
 public class WebServiceParams {
 
     public static Map<String, String> getHeader() {
@@ -39,7 +43,7 @@ public class WebServiceParams {
         return jsonObject;
     }
 
-    public static JSONObject susspendAndCloseSessionParams(String sessionKey) {
+    public static JSONObject suspendAndCloseSessionParams(String sessionKey) {
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("sessionKey", sessionKey);

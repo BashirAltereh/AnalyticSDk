@@ -30,6 +30,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+/**
+ * Created by BashirAltereh on 10/31/2019.
+ */
 
 public class Function implements OnDataLoaded {
 
@@ -197,12 +200,12 @@ public class Function implements OnDataLoaded {
 
     public void closeSession(Context context) {
         Log.d("Function", "closeSession");
-        ApiExplorer.DataLoader(context, this, WebServiceURL.CloseSession(), WebServiceParams.getHeader(), WebServiceParams.susspendAndCloseSessionParams("456789"), RequestPriority.IMMEDIATE);
+        ApiExplorer.DataLoader(context, this, WebServiceURL.CloseSession(), WebServiceParams.getHeader(), WebServiceParams.suspendAndCloseSessionParams("456789"), RequestPriority.IMMEDIATE);
 
     }
 
     public void suspendSession(Context context) {
-        ApiExplorer.DataLoader(context, this, WebServiceURL.SuspendSession(), WebServiceParams.getHeader(), WebServiceParams.susspendAndCloseSessionParams("456789"), RequestPriority.IMMEDIATE);
+        ApiExplorer.DataLoader(context, this, WebServiceURL.SuspendSession(), WebServiceParams.getHeader(), WebServiceParams.suspendAndCloseSessionParams("456789"), RequestPriority.IMMEDIATE);
     }
 
     public void collectUserData() {
