@@ -13,6 +13,7 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.example.analyticandroid.ILayerService;
+import com.example.analyticandroid.MyService;
 import com.example.analyticandroid.androidnetworking.error.ANError;
 import com.example.analyticandroid.internetSpeedMeter.datastats.datastats.LayerService;
 import com.example.analyticandroid.network.ApiExplorer;
@@ -63,6 +64,8 @@ public class Function implements OnDataLoaded {
     @SuppressLint("HardwareIds")
     public String openSession(Context context) {
         Log.d("Function", "openSession");
+        Intent i = new Intent(context, MyService.class);
+        context.startService(i);
         Map<String, String> map = getDeviceInfo(context);
 
         Log.d("Function", "Function: " + map);

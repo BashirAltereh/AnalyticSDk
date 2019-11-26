@@ -17,7 +17,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <receiver android:name="com.example.analyticandroid.internetSpeedMeter.datastats.datastats.BootReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
@@ -26,15 +25,16 @@
             </intent-filter>
         </receiver>
 
-        <service
-            android:name="com.example.analyticandroid.internetSpeedMeter.datastats.datastats.LayerService"
-            android:enabled="true"
-            android:exported="false" />
+<!--        <service-->
+<!--            android:name="com.example.analyticandroid.internetSpeedMeter.datastats.datastats.LayerService"-->
+<!--            android:enabled="true"-->
+<!--            android:exported="false" />-->
     </application>
-    <uses-permission android:name="android.permission.INTERNET" />
+
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
 </manifest>

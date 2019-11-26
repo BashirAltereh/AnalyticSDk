@@ -16,6 +16,7 @@ public class SDKApplication extends Application implements LifecycleDelegate, SD
     @Override
     public void onCreate() {
         registerLifecycleHandler(new AppLifecycleHandler(this,this));
+        appInitialization();
         super.onCreate();
     }
 
@@ -61,4 +62,23 @@ public class SDKApplication extends Application implements LifecycleDelegate, SD
         new Function().suspendSession(this);
 
     }
+
+    private void appInitialization() {
+        defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(_unCaughtExceptionHandler);
+    }
+
+    private Thread.UncaughtExceptionHandler defaultUEH;
+
+    // handler listener
+    private Thread.UncaughtExceptionHandler _unCaughtExceptionHandler = new Thread.UncaughtExceptionHandler() {
+        @Override
+        public void uncaughtException(Thread thread, Throwable ex) {
+            ex.printStackTrace();
+            // TODO: call crash API
+            Log.d("AppLifecycleHandler","------------------------------------App crash");
+            new Function().closeSession(getApplicationContext());
+
+        }
+    };
 }
