@@ -8,15 +8,8 @@ import android.net.NetworkInfo;
 import android.net.TrafficStats;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
-import android.os.Build;
 import android.os.Handler;
 import android.util.Log;
-
-import androidx.annotation.RequiresApi;
-
-import com.example.analyticandroid.models.RequestModel;
-
-import java.util.PriorityQueue;
 
 /**
  * Created by BashirAltereh on 10/31/2019.
@@ -24,7 +17,6 @@ import java.util.PriorityQueue;
 
 // todo:check idle
 public class DataFlowController {
-    public static PriorityQueue<RequestModel> requestQueue = new PriorityQueue<>();
 
     private static Handler mHandler = new Handler();
     private static long mPreviousRxBytes = 0;

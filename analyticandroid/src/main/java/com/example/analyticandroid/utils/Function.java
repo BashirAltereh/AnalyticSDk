@@ -14,6 +14,7 @@ import android.util.Log;
 
 import com.example.analyticandroid.ILayerService;
 import com.example.analyticandroid.MyService;
+import com.example.analyticandroid.Tasks;
 import com.example.analyticandroid.androidnetworking.error.ANError;
 import com.example.analyticandroid.internetSpeedMeter.datastats.datastats.LayerService;
 import com.example.analyticandroid.network.ApiExplorer;
@@ -221,7 +222,8 @@ public class Function implements OnDataLoaded {
     }
 
     @Override
-    public void onError(ANError e) {
+    public void onError(ANError e,String url, Map<String, String> header, JSONObject body, RequestPriority priority) {
+        Tasks.addRequestToQueue(url, header, body, priority);
 
     }
 

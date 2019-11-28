@@ -4,13 +4,14 @@ import com.example.analyticandroid.network.RequestPriority;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Created by BashirAltereh on 10/29/2019.
  */
 
-public class RequestModel implements Comparable<RequestModel> {
+public class RequestModel implements Comparable<RequestModel>, Serializable {
     private String url;
     private JSONObject body;
     private Map<String, String> header;
