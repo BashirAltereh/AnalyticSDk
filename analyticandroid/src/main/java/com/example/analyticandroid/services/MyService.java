@@ -1,4 +1,4 @@
-package com.example.analyticandroid;
+package com.example.analyticandroid.services;
 
 import android.annotation.SuppressLint;
 import android.app.Service;
@@ -10,6 +10,7 @@ import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.analyticandroid.Tasks;
 import com.example.analyticandroid.androidnetworking.error.ANError;
 import com.example.analyticandroid.network.ApiExplorer;
 import com.example.analyticandroid.network.OnDataLoaded;
@@ -20,6 +21,10 @@ import org.json.JSONObject;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
+
+/**
+ * Created by BashirAltereh on 11/27/2019.
+ */
 
 public class MyService extends Service {
     private static Timer timer = new Timer();
@@ -59,7 +64,7 @@ public class MyService extends Service {
     private final Handler toastHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            Toast.makeText(getApplicationContext(), "test: " + Tasks.isEmpty() + " ,, " + Tasks.requestQueue.size(), Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getApplicationContext(), "test: " + Tasks.isEmpty() + " ,, " + Tasks.requestQueue.size(), Toast.LENGTH_SHORT).show();
             if (!Tasks.isEmpty()) {
             Log.d("Services_", "test: " + Tasks.isEmpty() + " ,, " + Tasks.requestQueue.size() + " , " + Tasks.getRequestFromQueue().getUrl());
                 try {
@@ -72,7 +77,7 @@ public class MyService extends Service {
                         }
 
                         @Override
-                        public void onError(ANError e, String url, Map<String, String> header, JSONObject body, RequestPriority priority) {
+                        public void onDataLoadedWithError(ANError e, String url, Map<String, String> header, JSONObject body, RequestPriority priority) {
 
                         }
                     }, Tasks.getRequestFromQueue().getUrl(), Tasks.getRequestFromQueue().getHeader(), Tasks.getRequestFromQueue().getBody(), RequestPriority.IMMEDIATE);

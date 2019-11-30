@@ -4,6 +4,9 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.PowerManager;
@@ -17,7 +20,10 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 /**
  * For testing
@@ -73,6 +79,34 @@ public class MainActivity extends AppCompatActivity implements  View.OnClickList
 ////        DataFlowController.trafficStats(this,this);
 //        mTvTraffic.setOnClickListener(this);
 ////        readJSonFile();
+
+        int uiMode = getResources().getConfiguration().uiMode;
+        Log.d("uiMode_","uiMode: "+(uiMode &Configuration.UI_MODE_TYPE_MASK)+ " , " + Configuration.UI_MODE_TYPE_NORMAL);
+        try {
+            Geocoder geocoder;
+            List<Address> addresses;
+            geocoder = new Geocoder(this);
+            addresses = geocoder.getFromLocation(33.525369, 36.23085, 10); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+            if (addresses == null || addresses.isEmpty()) {
+                // Mygeocoder is a class with a http request to google server, that replaces Geocoder, if not work
+//                addresses = MyGeocoder.getFromLocation(latitude, longitude, 10);
+                Log.d("Address_","ifffffffffffffffffffffffffffff");
+            }
+            String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+            String city = addresses.get(0).getLocality();
+            String state = addresses.get(0).getAdminArea();
+            String country = addresses.get(0).getCountryName();
+            String postalCode = addresses.get(0).getPostalCode();
+            String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+            Log.d("Address_","address: "+addresses + " , "+city + " , "+ state);
+            Log.d("Address_","done");
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            Log.d("Address_","error: "+e);
+        }
+
+
 
     }
 

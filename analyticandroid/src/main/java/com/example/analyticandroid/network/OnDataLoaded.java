@@ -12,6 +12,6 @@ import java.util.Map;
 
 public interface OnDataLoaded {
     void onDataLoadedSuccessfully(JSONObject jsonObject);
-    void onError(ANError e, String url, Map<String, String> header, JSONObject body, RequestPriority priority);
+    void onDataLoadedWithError(ANError e, String url, Map<String, String> header, JSONObject body, RequestPriority priority);
 
 }

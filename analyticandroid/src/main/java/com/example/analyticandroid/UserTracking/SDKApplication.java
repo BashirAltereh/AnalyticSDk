@@ -4,6 +4,7 @@ import android.app.Application;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.analyticandroid.SDKerrors.OnErrorSDK;
 import com.example.analyticandroid.utils.Function;
 import com.example.analyticandroid.utils.SDKLifeCycle;
 
@@ -11,12 +12,12 @@ import com.example.analyticandroid.utils.SDKLifeCycle;
  * Created by BashirAltereh on 11/23/2019.
  */
 
-public class SDKApplication extends Application implements LifecycleDelegate, SDKLifeCycle {
+public class SDKApplication extends Application implements LifecycleDelegate, SDKLifeCycle,OnErrorSDK {
 
     @Override
     public void onCreate() {
-        registerLifecycleHandler(new AppLifecycleHandler(this,this));
-        appInitialization();
+        registerLifecycleHandler(new AppLifecycleHandler(this,this,this));
+//        appInitialization();
         super.onCreate();
     }
 
@@ -63,22 +64,11 @@ public class SDKApplication extends Application implements LifecycleDelegate, SD
 
     }
 
-    private void appInitialization() {
-        defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
-        Thread.setDefaultUncaughtExceptionHandler(_unCaughtExceptionHandler);
+    @Override
+    public void onErrorSDKOccur(Throwable ex) {
+        Log.d("AppLifecycleHandler","------------------------------------onErrorSDKOccur: "+ex.getCause());
+        new Function().closeSession(getApplicationContext());
+
+
     }
-
-    private Thread.UncaughtExceptionHandler defaultUEH;
-
-    // handler listener
-    private Thread.UncaughtExceptionHandler _unCaughtExceptionHandler = new Thread.UncaughtExceptionHandler() {
-        @Override
-        public void uncaughtException(Thread thread, Throwable ex) {
-            ex.printStackTrace();
-            // TODO: call crash API
-            Log.d("AppLifecycleHandler","------------------------------------App crash");
-            new Function().closeSession(getApplicationContext());
-
-        }
-    };
 }

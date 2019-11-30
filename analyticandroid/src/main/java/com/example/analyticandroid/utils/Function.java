@@ -13,10 +13,9 @@ import android.provider.Settings;
 import android.util.Log;
 
 import com.example.analyticandroid.ILayerService;
-import com.example.analyticandroid.MyService;
+import com.example.analyticandroid.services.MyService;
 import com.example.analyticandroid.Tasks;
 import com.example.analyticandroid.androidnetworking.error.ANError;
-import com.example.analyticandroid.internetSpeedMeter.datastats.datastats.LayerService;
 import com.example.analyticandroid.network.ApiExplorer;
 import com.example.analyticandroid.network.OnDataLoaded;
 import com.example.analyticandroid.network.RequestPriority;
@@ -178,10 +177,10 @@ public class Function implements OnDataLoaded {
 
     private void doBindService(Context context) {
 
-        Intent serviceIntent = new Intent(context, LayerService.class);
+        Intent serviceIntent = new Intent(context, ILayerService.class);
 
         // start
-//        MyLog.d("MainActivity: startService of LayerService");
+//        MyLog.d("MainActivity: startService of ILayerService");
         Log.d("services_", "MainActivity: startService ");
         if (Build.VERSION.SDK_INT >= 26) {
             context.startForegroundService(serviceIntent);
@@ -190,8 +189,8 @@ public class Function implements OnDataLoaded {
         }
 
         // bind
-//        MyLog.d("MainActivity: bindService of LayerService");
-        Log.d("services_", "MainActivity: bindService of LayerService ");
+//        MyLog.d("MainActivity: bindService of ILayerService");
+        Log.d("services_", "MainActivity: bindService of ILayerService ");
         context.bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
     }
 
@@ -222,7 +221,7 @@ public class Function implements OnDataLoaded {
     }
 
     @Override
-    public void onError(ANError e,String url, Map<String, String> header, JSONObject body, RequestPriority priority) {
+    public void onDataLoadedWithError(ANError e,String url, Map<String, String> header, JSONObject body, RequestPriority priority) {
         Tasks.addRequestToQueue(url, header, body, priority);
 
     }

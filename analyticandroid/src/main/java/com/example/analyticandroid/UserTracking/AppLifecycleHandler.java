@@ -12,6 +12,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.example.analyticandroid.SDKerrors.OnErrorSDK;
 import com.example.analyticandroid.utils.SDKLifeCycle;
 
 /**
@@ -21,12 +22,17 @@ import com.example.analyticandroid.utils.SDKLifeCycle;
 public class AppLifecycleHandler implements Application.ActivityLifecycleCallbacks, ComponentCallbacks2 {
     private LifecycleDelegate lifecycleDelegate;
     private SDKLifeCycle sdkLifeCycle;
+    private OnErrorSDK onErrorSDK;
+
     private boolean appInForeground = false;
     private boolean appInBackground = true;
 
-    AppLifecycleHandler(LifecycleDelegate lifecycleDelegate, SDKLifeCycle sdkLifeCycle) {
+    AppLifecycleHandler(LifecycleDelegate lifecycleDelegate, SDKLifeCycle sdkLifeCycle,OnErrorSDK onErrorSDK) {
         this.lifecycleDelegate = lifecycleDelegate;
         this.sdkLifeCycle = sdkLifeCycle;
+        this.onErrorSDK = onErrorSDK;
+
+        appInitialization();
     }
 
     @Override
@@ -119,4 +125,21 @@ public class AppLifecycleHandler implements Application.ActivityLifecycleCallbac
 
     }
 
+    // Catch all exception
+    private void appInitialization() {
+        defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(_unCaughtExceptionHandler);
+    }
+
+    private Thread.UncaughtExceptionHandler defaultUEH;
+
+    // handler listener
+    private Thread.UncaughtExceptionHandler _unCaughtExceptionHandler = new Thread.UncaughtExceptionHandler() {
+        @Override
+        public void uncaughtException(Thread thread, Throwable ex) {
+            ex.printStackTrace();
+            onErrorSDK.onErrorSDKOccur(ex);
+
+        }
+    };
 }

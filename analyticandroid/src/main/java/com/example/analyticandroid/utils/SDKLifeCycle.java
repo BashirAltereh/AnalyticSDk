@@ -6,7 +6,7 @@ package com.example.analyticandroid.utils;
 
 public interface SDKLifeCycle {
 
-     void initialize();
+    void initialize();
 
     void dispose();
 
