@@ -61,7 +61,6 @@ public class Function implements OnDataLoaded {
     public static String SCREEN_WIDTH;
     public static String SCREEN_HEIGHT;
 
-    @SuppressLint("HardwareIds")
     public String openSession(Context context) {
         Log.d("Function", "openSession");
         Intent i = new Intent(context, MyService.class);
