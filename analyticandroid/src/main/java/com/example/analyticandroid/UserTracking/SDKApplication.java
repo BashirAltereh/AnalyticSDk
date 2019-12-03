@@ -12,11 +12,11 @@ import com.example.analyticandroid.utils.SDKLifeCycle;
  * Created by BashirAltereh on 11/23/2019.
  */
 
-public class SDKApplication extends Application implements LifecycleDelegate, SDKLifeCycle,OnErrorSDK {
+public class SDKApplication extends Application implements LifecycleDelegate, SDKLifeCycle, OnErrorSDK {
 
     @Override
     public void onCreate() {
-        registerLifecycleHandler(new AppLifecycleHandler(this,this,this));
+        registerLifecycleHandler(new AppLifecycleHandler(this, this, this));
 //        appInitialization();
         super.onCreate();
     }
@@ -28,13 +28,13 @@ public class SDKApplication extends Application implements LifecycleDelegate, SD
 
     @Override
     public void onAppBackgrounded() {
-        Log.d("AppLifecycleHandler","---onAppBackgrounded");
+        Log.d("AppLifecycleHandler", "---onAppBackgrounded");
 
     }
 
     @Override
     public void onAppForegrounded() {
-        Log.d("AppLifecycleHandler","---onAppForegrounded");
+        Log.d("AppLifecycleHandler", "---onAppForegrounded");
 
     }
 
@@ -66,7 +66,7 @@ public class SDKApplication extends Application implements LifecycleDelegate, SD
 
     @Override
     public void onErrorSDKOccur(Throwable ex) {
-        Log.d("AppLifecycleHandler","------------------------------------onErrorSDKOccur: "+ex.getCause());
+        Log.d("AppLifecycleHandler", "------------------------------------onErrorSDKOccur: " + ex.getCause());
         new Function().closeSession(getApplicationContext());
 
 

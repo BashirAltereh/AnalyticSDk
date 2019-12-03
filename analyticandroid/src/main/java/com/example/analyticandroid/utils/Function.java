@@ -1,19 +1,14 @@
 package com.example.analyticandroid.utils;
 
 import android.annotation.SuppressLint;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.os.Build;
-import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
-import com.example.analyticandroid.ILayerService;
-import com.example.analyticandroid.services.MyService;
 import com.example.analyticandroid.Tasks;
 import com.example.analyticandroid.androidnetworking.error.ANError;
 import com.example.analyticandroid.network.ApiExplorer;
@@ -21,13 +16,13 @@ import com.example.analyticandroid.network.OnDataLoaded;
 import com.example.analyticandroid.network.RequestPriority;
 import com.example.analyticandroid.network.WebServiceParams;
 import com.example.analyticandroid.network.WebServiceURL;
+import com.example.analyticandroid.services.MyService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -36,7 +31,6 @@ import java.util.UUID;
  */
 
 public class Function implements OnDataLoaded {
-
     public static String SYSTEMVERSION;
     public static String DEVICEMODEL;
     public static String FINGERPRINT;
@@ -61,25 +55,21 @@ public class Function implements OnDataLoaded {
     public static String SCREEN_WIDTH;
     public static String SCREEN_HEIGHT;
 
-    public String openSession(Context context) {
+    public void openSession(Context context) {
         Log.d("Function", "openSession");
         Intent i = new Intent(context, MyService.class);
         context.startService(i);
-        Map<String, String> map = getDeviceInfo(context);
+        JSONObject attributes = getDeviceInfo(context);
 
-        Log.d("Function", "Function: " + map);
+        Log.d("Function", "Function: " + attributes);
 
-        try {
-            ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("", "bashir", 1, "damascus", 1, 41, new JSONObject().put("deviceModel", "bashir")), RequestPriority.IMMEDIATE);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("", "bashir", 1, "damascus", 1, 41, attributes), RequestPriority.IMMEDIATE);
 
-        return map.toString();
     }
 
 
-    private Map<String, String> getDeviceInfo(Context context) {
+    @SuppressLint("HardwareIds")
+    private JSONObject getDeviceInfo(Context context) {
         PackageManager pm = context.getPackageManager();
         PackageInfo info = new PackageInfo();
         try {
@@ -99,99 +89,145 @@ public class Function implements OnDataLoaded {
                 Settings.Secure.ANDROID_ID));
 
 
-        Map<String, String> map = new HashMap<>();
+        JSONObject attributes = new JSONObject();
+        try {
+            attributes.put("SystemVersion", Build.VERSION.RELEASE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("DeviceModel", Build.DEVICE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("uuid", UUID.randomUUID().toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("androidSecureId", Settings.Secure.getString(context.getContentResolver(),
+                        Settings.Secure.ANDROID_ID));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("Fingerprint", Build.FINGERPRINT);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("Package", this.getClass().getCanonicalName());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("BOARD", Build.BOARD);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("BRAND", Build.BRAND);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("DISPLAY", Build.DISPLAY);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("HARDWARE", Build.HARDWARE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("HOST", Build.HOST);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("ID", Build.ID);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("Manufacturer", Build.MANUFACTURER);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("Model", Build.MODEL);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("Product", Build.PRODUCT);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("Serial", Build.SERIAL);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("TAGS", Build.TAGS);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("TYPE", Build.TYPE);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("AppName", info.applicationInfo.loadLabel(pm).toString());
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("Version", info.versionName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            attributes.put("BuildNumber", String.valueOf(getLongVersionCode(info)));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+//            attributes.put("screenWidth", String.valueOf(width));
+//            attributes.put("screenHeight", String.valueOf(height));
 
-        map.put("SystemVersion", Build.VERSION.RELEASE);
-        map.put("DeviceModel", Build.DEVICE);
-        map.put("uuid", UUID.randomUUID().toString());
-        map.put("androidSecureId", Settings.Secure.getString(context.getContentResolver(),
-                Settings.Secure.ANDROID_ID));
-        map.put("Fingerprint", Build.FINGERPRINT);
-        map.put("Package", this.getClass().getCanonicalName());
-        map.put("BOARD", Build.BOARD);
-        map.put("BRAND", Build.BRAND);
-        map.put("DISPLAY", Build.DISPLAY);
-        map.put("HARDWARE", Build.HARDWARE);
-        map.put("HOST", Build.HOST);
-        map.put("ID", Build.ID);
-        map.put("MANUFACTURER", Build.MANUFACTURER);
-        map.put("MODEL", Build.MODEL);
-        map.put("PRODUCT", Build.PRODUCT);
-
-        map.put("SERIAL", Build.SERIAL);
-        map.put("TAGS", Build.TAGS);
-        map.put("TYPE", Build.TYPE);
-        map.put("APPNAME", info.applicationInfo.loadLabel(pm).toString());
-        map.put("VERSION", info.versionName);
-        map.put("BUILDNUMBER", String.valueOf(getLongVersionCode(info)));
-//        map.put("screenWidth", String.valueOf(width));
-//        map.put("screenHeight", String.valueOf(height));
-
-        SYSTEMVERSION = map.get("SystemVersion");
-        DEVICEMODEL = map.get("DeviceModel");
-        UUID_APP = map.get("uuid");
-        FINGERPRINT = map.get("Fingerprint");
-        PACKAGE = map.get("Package");
-        BOARD = map.get("BOARD");
-        BRAND = map.get("BRAND");
-        DISPLAY = map.get("DISPLAY");
-        HARDWARE = map.get("HARDWARE");
-        HOST = map.get("HOST");
-        ID = map.get("ID");
-        SECURE_ANDROID_ID = map.get("androidSecureId");
-        MANUFACTURER = map.get("MANUFACTURER");
-        MODEL = map.get("MODEL");
-        PRODUCT = map.get("PRODUCT");
-        SERIAL = map.get("SERIAL");
-        TAGS = map.get("TAGS");
-        TYPE = map.get("TYPE");
-        APPNAME = map.get("APPNAME");
-        VERSION = map.get("VERSION");
-        BUILDNUMBER = map.get("BUILDNUMBER");
-        SCREEN_WIDTH = map.get("screenWidth");
-        SCREEN_HEIGHT = map.get("screenHeight");
-        doBindService(context);
-        return map;
+        try {
+            SYSTEMVERSION = attributes.getString("SystemVersion");
+            DEVICEMODEL = attributes.getString("DeviceModel");
+            UUID_APP = attributes.getString("uuid");
+            FINGERPRINT = attributes.getString("Fingerprint");
+            PACKAGE = attributes.getString("Package");
+            BOARD = attributes.getString("BOARD");
+            BRAND = attributes.getString("BRAND");
+            DISPLAY = attributes.getString("DISPLAY");
+            HARDWARE = attributes.getString("HARDWARE");
+            HOST = attributes.getString("HOST");
+            ID = attributes.getString("ID");
+            SECURE_ANDROID_ID = attributes.getString("androidSecureId");
+            MANUFACTURER = attributes.getString("MANUFACTURER");
+            MODEL = attributes.getString("MODEL");
+            PRODUCT = attributes.getString("PRODUCT");
+            SERIAL = attributes.getString("SERIAL");
+            TAGS = attributes.getString("TAGS");
+            TYPE = attributes.getString("TYPE");
+            APPNAME = attributes.getString("APPNAME");
+            VERSION = attributes.getString("VERSION");
+            BUILDNUMBER = attributes.getString("BUILDNUMBER");
+            SCREEN_WIDTH = attributes.getString("screenWidth");
+            SCREEN_HEIGHT = attributes.getString("screenHeight");
+        } catch (Exception e) {
+        }
+        return attributes;
     }
 
-    private ILayerService mServiceIF = null;
-
-    ServiceConnection mServiceConnection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-
-//            MyLog.d("onServiceConnected["+componentName);
-
-            mServiceIF = ILayerService.Stub.asInterface(iBinder);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName componentName) {
-
-//            MyLog.d("onServiceDisconnected["+componentName);
-
-            mServiceIF = null;
-        }
-    };
-
-    private void doBindService(Context context) {
-
-        Intent serviceIntent = new Intent(context, ILayerService.class);
-
-        // start
-//        MyLog.d("MainActivity: startService of ILayerService");
-        Log.d("services_", "MainActivity: startService ");
-        if (Build.VERSION.SDK_INT >= 26) {
-            context.startForegroundService(serviceIntent);
-        } else {
-            context.startService(serviceIntent);
-        }
-
-        // bind
-//        MyLog.d("MainActivity: bindService of ILayerService");
-        Log.d("services_", "MainActivity: bindService of ILayerService ");
-        context.bindService(serviceIntent, mServiceConnection, Context.BIND_AUTO_CREATE);
-    }
 
     private long getLongVersionCode(PackageInfo info) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
@@ -210,9 +246,6 @@ public class Function implements OnDataLoaded {
         ApiExplorer.DataLoader(context, this, WebServiceURL.SuspendSession(), WebServiceParams.getHeader(), WebServiceParams.suspendAndCloseSessionParams("456789"), RequestPriority.IMMEDIATE);
     }
 
-    public void collectUserData() {
-        Log.d("Function", "collectUserData");
-    }
 
     @Override
     public void onDataLoadedSuccessfully(JSONObject jsonObject) {
@@ -220,7 +253,7 @@ public class Function implements OnDataLoaded {
     }
 
     @Override
-    public void onDataLoadedWithError(ANError e,String url, Map<String, String> header, JSONObject body, RequestPriority priority) {
+    public void onDataLoadedWithError(ANError e, String url, Map<String, String> header, JSONObject body, RequestPriority priority) {
         Tasks.addRequestToQueue(url, header, body, priority);
 
     }

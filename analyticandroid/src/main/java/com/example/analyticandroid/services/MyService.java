@@ -16,6 +16,7 @@ import com.example.analyticandroid.network.ApiExplorer;
 import com.example.analyticandroid.network.OnDataLoaded;
 import com.example.analyticandroid.network.RequestPriority;
 
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONObject;
 
 import java.util.Map;
@@ -63,7 +64,7 @@ public class MyService extends Service {
     @SuppressLint("HandlerLeak")
     private final Handler toastHandler = new Handler() {
         @Override
-        public void handleMessage(Message msg) {
+        public void handleMessage(@NotNull Message msg) {
 //            Toast.makeText(getApplicationContext(), "test: " + Tasks.isEmpty() + " ,, " + Tasks.requestQueue.size(), Toast.LENGTH_SHORT).show();
             if (!Tasks.isEmpty()) {
             Log.d("Services_", "test: " + Tasks.isEmpty() + " ,, " + Tasks.requestQueue.size() + " , " + Tasks.getRequestFromQueue().getUrl());
