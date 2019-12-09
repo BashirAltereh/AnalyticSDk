@@ -126,12 +126,12 @@ public class AppLifecycleHandler implements Application.ActivityLifecycleCallbac
     }
 
     // Catch all exception
+    private Thread.UncaughtExceptionHandler defaultUEH;
     private void appInitialization() {
         defaultUEH = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(_unCaughtExceptionHandler);
     }
 
-    private Thread.UncaughtExceptionHandler defaultUEH;
 
     // handler listener
     private Thread.UncaughtExceptionHandler _unCaughtExceptionHandler = new Thread.UncaughtExceptionHandler() {
