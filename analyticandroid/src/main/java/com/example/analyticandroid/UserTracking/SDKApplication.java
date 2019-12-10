@@ -39,7 +39,7 @@ public class SDKApplication extends Application implements LifecycleDelegate, SD
     }
 
     @Override
-    public void initialize() {
+    final public void initialize() {
         Toast toast = new Toast(this);
         toast.cancel();
         Toast.makeText(this, "initialize", Toast.LENGTH_SHORT).show();
@@ -48,7 +48,7 @@ public class SDKApplication extends Application implements LifecycleDelegate, SD
     }
 
     @Override
-    public void dispose() {
+    final public void dispose() {
         Toast toast = new Toast(this);
         toast.cancel();
         Toast.makeText(this, "dispose", Toast.LENGTH_SHORT).show();
@@ -56,7 +56,7 @@ public class SDKApplication extends Application implements LifecycleDelegate, SD
     }
 
     @Override
-    public void suspend() {
+    final public void suspend() {
         Toast toast = new Toast(this);
         toast.cancel();
         Toast.makeText(this, "suspend", Toast.LENGTH_SHORT).show();
