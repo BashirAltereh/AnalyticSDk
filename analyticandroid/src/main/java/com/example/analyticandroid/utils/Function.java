@@ -63,7 +63,14 @@ public class Function implements OnDataLoaded {
 
         Log.d("Function", "Function: " + attributes);
 
-        ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("", "bashir", 1, "damascus", 1, 41, attributes), RequestPriority.IMMEDIATE);
+        JSONObject object = readJsonFile(context);
+        String s = "";
+        try {
+            s = object.getString("appKey");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("", "bashir", 1, "damascus", 1, Integer.parseInt(s), attributes), RequestPriority.IMMEDIATE);
 
     }
 
@@ -77,7 +84,6 @@ public class Function implements OnDataLoaded {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        readJsonFile(context);
 //        Activity activity = (Activity) context;
 //        DisplayMetrics displayMetrics = new DisplayMetrics();
 //        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -107,7 +113,7 @@ public class Function implements OnDataLoaded {
         }
         try {
             attributes.put("androidSecureId", Settings.Secure.getString(context.getContentResolver(),
-                        Settings.Secure.ANDROID_ID));
+                    Settings.Secure.ANDROID_ID));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -259,7 +265,7 @@ public class Function implements OnDataLoaded {
     }
 
 
-    private void readJsonFile(Context context) {
+    private JSONObject readJsonFile(Context context) {
         String json = null;
         try {
             InputStream is = context.getAssets().open("sdk_conf.json");
@@ -269,8 +275,15 @@ public class Function implements OnDataLoaded {
             is.close();
             json = new String(buffer, "UTF-8");
             Log.d("jsonFile", "json: " + json);
+            try {
+                return new JSONObject(json);
+            } catch (JSONException e) {
+                e.printStackTrace();
+                return new JSONObject();
+            }
         } catch (IOException ex) {
             ex.printStackTrace();
+            return new JSONObject();
         }
     }
 }
