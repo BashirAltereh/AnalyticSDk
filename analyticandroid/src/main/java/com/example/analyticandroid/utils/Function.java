@@ -64,10 +64,11 @@ public class Function implements OnDataLoaded {
         Log.d("Function", "Function: " + attributes);
 
         JSONObject object = readJsonFile(context);
-        String s = "";
+        String s = "-1";
         try {
             s = object.getString("appKey");
         } catch (JSONException e) {
+            s = "-1";
             e.printStackTrace();
         }
         ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("", "bashir", 1, "damascus", 1, Integer.parseInt(s), attributes), RequestPriority.IMMEDIATE);
@@ -77,14 +78,15 @@ public class Function implements OnDataLoaded {
 
     @SuppressLint("HardwareIds")
     private JSONObject getDeviceInfo(Context context) {
-        PackageManager pm = context.getPackageManager();
         PackageInfo info = new PackageInfo();
+        PackageManager pm = null;
         try {
+             pm = context.getPackageManager();
+//        Activity activity = (Activity) context;
             info = pm.getPackageInfo(context.getPackageName(), 0);
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-//        Activity activity = (Activity) context;
 //        DisplayMetrics displayMetrics = new DisplayMetrics();
 //        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 //        int height = displayMetrics.heightPixels;
