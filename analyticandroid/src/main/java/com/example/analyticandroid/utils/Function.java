@@ -64,14 +64,14 @@ public class Function implements OnDataLoaded {
         Log.d("Function", "Function: " + attributes);
 
         JSONObject object = readJsonFile(context);
-        String s = "-1";
+        String appKey = "-1";
         try {
-            s = object.getString("appKey");
+            appKey = object.getString("appKey");
         } catch (JSONException e) {
-            s = "-1";
+            appKey = "-1";
             e.printStackTrace();
         }
-        ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("", "bashir", 1, "damascus", 1, Integer.parseInt(s), attributes), RequestPriority.IMMEDIATE);
+        ApiExplorer.DataLoader(context, this, WebServiceURL.AddSessionUrl(), WebServiceParams.getHeader(), WebServiceParams.openSessionParams("", "bashir", 1, "damascus", 1, appKey, attributes), RequestPriority.IMMEDIATE);
 
     }
 

@@ -24,7 +24,7 @@ public class WebServiceParams {
 
     public static JSONObject openSessionParams(String sessionKey, String username,
                                                int genderId, String address,int userId
-            ,int appId, JSONObject attributes) {
+            ,String appKey, JSONObject attributes) {
         final JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("sessionKey", sessionKey);
@@ -32,7 +32,7 @@ public class WebServiceParams {
             jsonObject.put("genderId", genderId);
             jsonObject.put("address", address);
             jsonObject.put("userId", userId);
-            jsonObject.put("appId", appId);
+            jsonObject.put("appKey", appKey);
             jsonObject.put("attributes", attributes);
 
 
