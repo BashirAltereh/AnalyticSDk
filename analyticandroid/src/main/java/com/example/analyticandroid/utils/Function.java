@@ -125,7 +125,7 @@ public class Function implements OnDataLoaded {
             e.printStackTrace();
         }
         try {
-            attributes.put("Package", this.getClass().getCanonicalName());
+            attributes.put("Package", context.getPackageName());
         } catch (JSONException e) {
             e.printStackTrace();
         }
